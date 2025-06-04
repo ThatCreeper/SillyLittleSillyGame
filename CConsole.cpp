@@ -1,5 +1,7 @@
 #include "CConsole.h"
 
+#include "CoreWin.h"
+
 CConsole gConsole;
 
 CConsole::CConsole() {

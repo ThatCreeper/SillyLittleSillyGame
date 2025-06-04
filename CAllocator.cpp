@@ -1,5 +1,7 @@
 #include "CAllocator.h"
 
+#include "CoreWin.h"
+
 CAllocator gAllocator;
 
 inline CAllocator::CAllocator() {

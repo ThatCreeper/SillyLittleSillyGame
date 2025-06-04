@@ -3,13 +3,15 @@
 
 // Set Break-point Here!
 void Panic() {
-	ExitProcess(1);
+	Exit(1);
 }
 
 int main() {
 	CUserLib::Open();
 
-
+	gUserLib.RegisterClass("WinClass");
+	HWindow Window = gUserLib.CreateWindow("WinClass", "Test Window", 500, 500);
+	gUserLib.ShowWindow(Window);
 
 	CUserLib::Close();
 	return 0;

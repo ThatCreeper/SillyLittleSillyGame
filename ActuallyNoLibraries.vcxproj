@@ -165,6 +165,7 @@
     <ClInclude Include="CAllocator.h" />
     <ClInclude Include="CConsole.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="CoreWin.h" />
     <ClInclude Include="CStringView.h" />
     <ClInclude Include="CUserLib.h" />
   </ItemGroup>

@@ -1,5 +1,7 @@
 #include "Core.h"
 
+#include "CoreWin.h"
+
 // Standards-compliant
 static void (*gExitHandlers[32])();
 static int gcExitHandlers = 0;
@@ -15,4 +17,9 @@ void CallExitHandlers() {
 	for (int i = 0; i < gcExitHandlers; i++) {
 		gExitHandlers[i]();
 	}
+}
+
+void Exit(int ExitCode) {
+	CallExitHandlers();
+	ExitProcess(ExitCode);
 }

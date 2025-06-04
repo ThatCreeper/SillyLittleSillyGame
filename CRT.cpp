@@ -1,4 +1,4 @@
-#include "Core.h"
+#include "CoreWin.h"
 #include "CAllocator.h"
 #include "CConsole.h"
 

@@ -53,5 +53,8 @@
     <ClInclude Include="CUserLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CoreWin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
