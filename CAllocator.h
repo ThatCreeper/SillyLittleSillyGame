@@ -12,6 +12,9 @@ public:
 
 	void Free(void *Pointer);
 
+	void *Resize(void *Pointer, size_t NewSize);
+	void *ResizeZeroed(void *Pointer, size_t NewSize);
+
 protected:
 	HHeap mHeap;
 };

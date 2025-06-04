@@ -23,3 +23,17 @@ void Exit(int ExitCode) {
 	CallExitHandlers();
 	ExitProcess(ExitCode);
 }
+
+int Pow(int Number, int Exponent)
+{
+	if (Exponent < 0)
+		return 0;
+
+	int Return = 1;
+	
+	while (Exponent--) {
+		Return *= Number;
+	}
+
+	return Return;
+}

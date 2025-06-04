@@ -14,6 +14,7 @@ extern "C" {
 	int HeapDestroy(HHeap Heap);
 	HHeap HeapAlloc(HHeap Heap, int Flags, size_t Size);
 	int HeapFree(HHeap Heap, int Flags, void *Pointer);
+	void *HeapReAlloc(HHeap Heap, int Flags, void *Memory, size_t Size);
 
 	HConsoleHandle GetStdHandle(EHandleType HandleType);
 	int WriteConsoleA(HConsoleHandle Console, const void *Buffer, int Count, int *OutWritten, void *Unused);

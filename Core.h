@@ -18,3 +18,5 @@ extern "C" int atexit(void (*ExitHandler)());
 void CallExitHandlers();
 
 void Exit(int ExitCode);
+
+int Pow(int Number, int Exponent);

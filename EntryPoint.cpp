@@ -1,6 +1,7 @@
 #include "Core.h"
 #include "CConsole.h"
 #include "CUserLib.h"
+#include "CString.h"
 
 // Set Break-point Here!
 void Panic() {

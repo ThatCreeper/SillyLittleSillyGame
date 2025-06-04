@@ -27,6 +27,16 @@ inline void CAllocator::Free(void *Pointer) {
 	HeapFree(this->mHeap, 0, Pointer);
 }
 
+void *CAllocator::Resize(void *Pointer, size_t NewSize)
+{
+	return HeapReAlloc(this->mHeap, 0 /* No Flags */, Pointer, NewSize);
+}
+
+void *CAllocator::ResizeZeroed(void *Pointer, size_t NewSize)
+{
+	return HeapReAlloc(this->mHeap, 0x8 /* Zeroed */, Pointer, NewSize);
+}
+
 void *operator new(size_t Size, void *Into) {
 	return Into;
 }

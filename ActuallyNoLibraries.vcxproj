@@ -157,6 +157,7 @@
     <ClCompile Include="CConsole.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="CRT.cpp" />
+    <ClCompile Include="CString.cpp" />
     <ClCompile Include="CStringView.cpp" />
     <ClCompile Include="CUserLib.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="CConsole.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreWin.h" />
+    <ClInclude Include="CString.h" />
     <ClInclude Include="CStringView.h" />
     <ClInclude Include="CUserLib.h" />
   </ItemGroup>
