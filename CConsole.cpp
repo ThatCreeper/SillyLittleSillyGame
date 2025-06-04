@@ -1,0 +1,43 @@
+#include "CConsole.h"
+
+CConsole gConsole;
+
+CConsole::CConsole() {
+	this->mStdIn = GetStdHandle(EHandleType::Input);
+	this->mStdOut = GetStdHandle(EHandleType::Output);
+}
+
+CConsole::~CConsole() {
+	CloseHandle(this->mStdOut);
+	CloseHandle(this->mStdIn);
+}
+
+void CConsole::Write(const char *String, int Length) {
+	int Written;
+	WriteConsoleA(this->mStdOut, String, Length, &Written, nullptr);
+}
+
+void CConsole::Write(CStringView String) {
+	this->Write(String.Data(), String.Length());
+}
+
+int CConsole::Read(char *Output, int Size) {
+	if (Size <= 3)
+		return 0;
+	int Read = 0;
+	ReadConsoleA(this->mStdIn, Output, Size - 3, &Read, nullptr);
+	Output[Read - 2] = '\r';
+	Output[Read - 1] = '\n';
+	Output[Read - 0] = '\0';
+	return Read;
+}
+
+void CConsole::FlushInput() {
+	FlushConsoleInputBuffer(this->mStdIn);
+}
+
+void CConsole::WaitForLine() {
+	this->FlushInput();
+	char Output[4];
+	this->Read(Output, 4);
+}
