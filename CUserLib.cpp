@@ -7,7 +7,7 @@ CUserLib gUserLib;
 
 struct SWindowClass {
 	unsigned int Style;
-	long long (*WindowProcedure)(HWindow, unsigned int, unsigned long long, long long);
+	FWindowProcedure WindowProcedure;
 	int WindowClassExtraBytes;
 	int WindowInstanceExtraBytes;
 	HInstance ProcedureInstance;
@@ -23,12 +23,16 @@ CUserLib::CUserLib() {
 	this->mInstance = GetModuleHandleA(nullptr);
 
 	// I'm sorry.
-#define LOAD_USER(Name) *((int **)(&this->m##Name)) = (int *)GetProcAddress(this->mUserLib, #Name)
+#define LOAD_USER(Name) *((void **)(&this->m##Name)) = (void *)GetProcAddress(this->mUserLib, #Name); if (!this->m##Name) Panic()
 	
 	LOAD_USER(RegisterClassA);
 	LOAD_USER(DefWindowProcA);
 	LOAD_USER(CreateWindowExA);
 	LOAD_USER(ShowWindow);
+	LOAD_USER(GetMessageA);
+	LOAD_USER(TranslateMessage);
+	LOAD_USER(DispatchMessageA);
+	LOAD_USER(PostQuitMessage);
 
 #undef LOAD_USER
 }
@@ -49,10 +53,10 @@ HInstance CUserLib::GetInstance() {
 	return this->mInstance;
 }
 
-void CUserLib::RegisterClass(const char *ClassName) {
+void CUserLib::RegisterClass(const char *ClassName, FWindowProcedure WindowProcedure) {
 	SWindowClass WindowClass;
 	WindowClass.Style = 0;
-	WindowClass.WindowProcedure = this->mDefWindowProcA;
+	WindowClass.WindowProcedure = WindowProcedure;
 	WindowClass.WindowClassExtraBytes = 0;
 	WindowClass.WindowInstanceExtraBytes = 0;
 	WindowClass.ProcedureInstance = this->mInstance;
@@ -80,4 +84,34 @@ HWindow CUserLib::CreateWindow(const char *ClassName, const char *WindowName, in
 
 void CUserLib::ShowWindow(HWindow Window) {
 	this->mShowWindow(Window, 1 /* Show Normal */);
+}
+
+bool CUserLib::PopQueuedWindowMessage(SWindowMessage *OutMessage, HWindow Window)
+{
+	return this->mGetMessageA(OutMessage, Window, 0 /* No Filter */, 0 /* No Filter */);
+}
+
+bool CUserLib::PopQueuedMessage(SWindowMessage *OutMessage)
+{
+	return this->PopQueuedWindowMessage(OutMessage, nullptr);
+}
+
+void CUserLib::TranslateVirtualKeyMessages(SWindowMessage *Message)
+{
+	this->mTranslateMessage(Message);
+}
+
+long long CUserLib::CallRelevantWindowProcedure(SWindowMessage *Message)
+{
+	return this->mDispatchMessageA(Message);
+}
+
+void CUserLib::StopMessageQueue()
+{
+	this->mPostQuitMessage(0 /* Exit Code */);
+}
+
+FWindowProcedure CUserLib::DefaultWindowProcedure()
+{
+	return this->mDefWindowProcA;
 }

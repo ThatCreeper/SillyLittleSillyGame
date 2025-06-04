@@ -15,6 +15,8 @@ CConsole::~CConsole() {
 }
 
 void CConsole::Write(const char *String, int Length) {
+	if (!this->mStdOut)
+		return;
 	int Written;
 	WriteConsoleA(this->mStdOut, String, Length, &Written, nullptr);
 }
@@ -24,6 +26,8 @@ void CConsole::Write(CStringView String) {
 }
 
 int CConsole::Read(char *Output, int Size) {
+	if (!this->mStdIn)
+		return 0;
 	if (Size <= 3)
 		return 0;
 	int Read = 0;

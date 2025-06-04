@@ -16,8 +16,8 @@ public:
 	void WaitForLine();
 
 protected:
-	HConsoleHandle mStdIn;
-	HConsoleHandle mStdOut;
+	HConsoleHandle mStdIn = nullptr;
+	HConsoleHandle mStdOut = nullptr;
 };
 
 extern CConsole gConsole;
