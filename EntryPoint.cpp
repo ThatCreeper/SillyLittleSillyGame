@@ -14,15 +14,18 @@ void Panic() {
 }
 
 int Frame = 0;
+unsigned long long lastTime = -1;
 
 long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WParam, long long LParam) {
 	switch (MessageKind) {
 	case EMessageKind::Paint:
 		{
-			if (Frame % 60 == 0)
+			unsigned long long curTime = GetTimeMilliseconds();
+			if (Frame++ % 60 == 0)
 				gConsole.WriteInteger(Frame / 60);
 
-			gGLLib.SetClearColor((Frame++) * 0.01f, 0, 1, 1);
+			float r = (float)(curTime - lastTime) / 5000.f;
+			gGLLib.SetClearColor(r, 0, 1, 1);
 			gGLLib.ClearBuffers(EClearBuffer::Color);
 			gGLLib.Flush();
 			SPaintStruct paint = gUserLib.BeginPainting(Window);
@@ -57,6 +60,8 @@ int main() {
 	gGLLib.EnableVSync();
 
 	gUserLib.ShowWindow(Window);
+
+	lastTime = GetTimeMilliseconds();
 
 	SWindowMessage WindowMessage;
 	while (gUserLib.PopQueuedMessage(&WindowMessage)) {

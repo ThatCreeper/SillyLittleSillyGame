@@ -26,4 +26,7 @@ extern "C" {
 	void *GetProcAddress(HLibrary Library, const char *ProcedureName);
 
 	HInstance GetModuleHandleA(const char *ModuleName);
+
+	int QueryPerformanceCounter(unsigned long long *OutCounts);
+	int QueryPerformanceFrequency(unsigned long long *OutFrequency);
 }

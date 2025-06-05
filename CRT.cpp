@@ -6,12 +6,17 @@ int main();
 
 extern "C" int _fltused = 0;
 
+unsigned long long PerfCounterFrequency;
+
 // The parameter to this function is unused in the example provided by the Visual C Runtime.
 extern "C" int mainCRTStartup(void *) {
 	SetLastError(0);
 
 	new(&gAllocator)CAllocator;
 	new(&gConsole)CConsole;
+
+	QueryPerformanceFrequency(&PerfCounterFrequency);
+	PerfCounterFrequency /= 1000;
 
 	int Ret = main();
 

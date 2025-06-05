@@ -19,5 +19,6 @@ void CallExitHandlers();
 
 void Exit(int ExitCode);
 int GetWinAPIError();
+unsigned long long GetTimeMilliseconds();
 
 int Pow(int Number, int Exponent);
