@@ -29,13 +29,13 @@ int GetWinAPIError()
 	return GetLastError();
 }
 
-extern unsigned long long PerfCounterFrequency;
+extern unsigned long long gPerfCounterFrequency;
 
 unsigned long long GetTimeMilliseconds()
 {
 	unsigned long long Counts;
 	QueryPerformanceCounter(&Counts);
-	Counts /= PerfCounterFrequency;
+	Counts /= gPerfCounterFrequency;
 	return Counts;
 }
 

@@ -6,7 +6,12 @@ int main();
 
 extern "C" int _fltused = 0;
 
-unsigned long long PerfCounterFrequency;
+unsigned long long gPerfCounterFrequency;
+
+static void SetupPerformanceCounter() {
+	QueryPerformanceFrequency(&gPerfCounterFrequency);
+	gPerfCounterFrequency /= 1000;
+}
 
 // The parameter to this function is unused in the example provided by the Visual C Runtime.
 extern "C" int mainCRTStartup(void *) {
@@ -15,8 +20,7 @@ extern "C" int mainCRTStartup(void *) {
 	new(&gAllocator)CAllocator;
 	new(&gConsole)CConsole;
 
-	QueryPerformanceFrequency(&PerfCounterFrequency);
-	PerfCounterFrequency /= 1000;
+	SetupPerformanceCounter();
 
 	int Ret = main();
 
@@ -24,6 +28,7 @@ extern "C" int mainCRTStartup(void *) {
 
 	gConsole.~CConsole();
 	gAllocator.~CAllocator();
+	
 	ExitProcess(Ret);
 	return Ret;
 }
