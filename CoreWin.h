@@ -29,4 +29,8 @@ extern "C" {
 
 	int QueryPerformanceCounter(unsigned long long *OutCounts);
 	int QueryPerformanceFrequency(unsigned long long *OutFrequency);
+
+	void *CreateThread(void *SecurityAttributes, size_t StackSize, int (*Function)(void *), void *User, int Flags, int *OutThreadId);
+	void Sleep(int Milliseconds);
+	int Beep(int Frequency, int Milliseconds);
 }
