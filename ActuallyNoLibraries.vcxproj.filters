@@ -39,6 +39,9 @@
     <ClCompile Include="CString.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CGLLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CGLLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

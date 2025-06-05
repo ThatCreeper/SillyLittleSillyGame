@@ -10,6 +10,9 @@ public:
 
 	void Write(const char *String, int Length);
 	void Write(CStringView String);
+
+	void WriteInteger(int Integer);
+
 	int Read(char *Output, int Size);
 	
 	void FlushInput();

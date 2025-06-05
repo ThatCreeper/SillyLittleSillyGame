@@ -4,6 +4,7 @@
 
 using HRegisteredClass = unsigned short;
 using HWindow = void *;
+using HDeviceContext = void *;
 
 struct SWindowClass;
 
@@ -23,9 +24,26 @@ struct SWindowMessage {
 };
 
 enum class EMessageKind : unsigned int {
-	Destroyed = 0x0002
+	Destroyed = 0x0002,
+	Paint = 0x000F
 };
 typedef long long (*FWindowProcedure)(HWindow, EMessageKind, long long, long long);
+
+struct SPaintRect {
+	int left;
+	int top;
+	int right;
+	int bottom;
+};
+
+struct SPaintStruct {
+	HDeviceContext DeviceContext;
+	int BackgroundNeedsErasing;
+	SPaintRect RequestedArea;
+	int PrivateRestore;
+	int PrivateIncUpdate;
+	char PrivateRGB[32];
+};
 
 class CUserLib {
 public:
@@ -50,6 +68,12 @@ public:
 
 	FWindowProcedure DefaultWindowProcedure();
 
+	HDeviceContext GetWindowDeviceContext(HWindow Window);
+
+	SPaintStruct BeginPainting(HWindow Window);
+	void EndPainting(HWindow Window, SPaintStruct *PaintStruct);
+	void RequestAnimationFrame(HWindow Window);
+
 private:
 	HInstance mInstance;
 	HLibrary mUserLib;
@@ -62,6 +86,10 @@ private:
 	int (*mTranslateMessage)(SWindowMessage *);
 	long long (*mDispatchMessageA)(SWindowMessage *);
 	void (*mPostQuitMessage)(int);
+	HDeviceContext(*mGetDC)(HWindow);
+	HDeviceContext(*mBeginPaint)(HWindow, SPaintStruct *);
+	int (*mEndPaint)(HWindow, SPaintStruct *);
+	int (*mInvalidateRect)(HWindow, SPaintRect *, int);
 };
 
 extern CUserLib gUserLib;

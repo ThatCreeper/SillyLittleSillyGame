@@ -1,6 +1,7 @@
 #include "CConsole.h"
 
 #include "CoreWin.h"
+#include "CString.h"
 
 CConsole gConsole;
 
@@ -23,6 +24,13 @@ void CConsole::Write(const char *String, int Length) {
 
 void CConsole::Write(CStringView String) {
 	this->Write(String.Data(), String.Length());
+}
+
+void CConsole::WriteInteger(int Integer)
+{
+	CString String;
+	String.AddInteger(Integer);
+	this->Write(String.View());
 }
 
 int CConsole::Read(char *Output, int Size) {

@@ -33,6 +33,10 @@ CUserLib::CUserLib() {
 	LOAD_USER(TranslateMessage);
 	LOAD_USER(DispatchMessageA);
 	LOAD_USER(PostQuitMessage);
+	LOAD_USER(GetDC);
+	LOAD_USER(BeginPaint);
+	LOAD_USER(EndPaint);
+	LOAD_USER(InvalidateRect);
 
 #undef LOAD_USER
 }
@@ -114,4 +118,28 @@ void CUserLib::StopMessageQueue()
 FWindowProcedure CUserLib::DefaultWindowProcedure()
 {
 	return this->mDefWindowProcA;
+}
+
+HDeviceContext CUserLib::GetWindowDeviceContext(HWindow Window)
+{
+	return this->mGetDC(Window);
+}
+
+SPaintStruct CUserLib::BeginPainting(HWindow Window)
+{
+	SPaintStruct PaintStruct;
+	HDeviceContext Context = this->mBeginPaint(Window, &PaintStruct);
+	if (Context != PaintStruct.DeviceContext)
+		Panic();
+	return PaintStruct;
+}
+
+void CUserLib::EndPainting(HWindow Window, SPaintStruct *PaintStruct)
+{
+	this->mEndPaint(Window, PaintStruct);
+}
+
+void CUserLib::RequestAnimationFrame(HWindow Window)
+{
+	this->mInvalidateRect(Window, nullptr, true /* Redraw Background */);
 }

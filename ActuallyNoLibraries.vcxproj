@@ -155,6 +155,7 @@
   <ItemGroup>
     <ClCompile Include="CAllocator.cpp" />
     <ClCompile Include="CConsole.cpp" />
+    <ClCompile Include="CGLLib.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="CRT.cpp" />
     <ClCompile Include="CString.cpp" />
@@ -165,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="CAllocator.h" />
     <ClInclude Include="CConsole.h" />
+    <ClInclude Include="CGLLib.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreWin.h" />
     <ClInclude Include="CString.h" />

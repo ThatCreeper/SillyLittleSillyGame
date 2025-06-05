@@ -24,6 +24,11 @@ void Exit(int ExitCode) {
 	ExitProcess(ExitCode);
 }
 
+int GetWinAPIError()
+{
+	return GetLastError();
+}
+
 int Pow(int Number, int Exponent)
 {
 	if (Exponent < 0)
