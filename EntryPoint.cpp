@@ -26,7 +26,5 @@ int main() {
 	CEngine Engine("Demo");
 	Engine.Loop();
 
-	gConsole.WaitForLine();
-
 	return 0;
 }
