@@ -7,6 +7,11 @@ public:
 
 	const char *Data() const;
 	int Length() const;
+	// Data = null || Length = 0
+	bool Invalid() const;
+
+	// WARNING! Returns Length() if no such character exists
+	int IndexOfFirstOccurance(char Character) const;
 
 	int ParseInteger() const;
 

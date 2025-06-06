@@ -26,6 +26,21 @@ int CStringView::Length() const {
 	return this->mLength;
 }
 
+bool CStringView::Invalid() const
+{
+	return !this->mData || !this->mLength;
+}
+
+int CStringView::IndexOfFirstOccurance(char Character) const
+{
+	for (int i = 0; i < this->mLength; i++) {
+		if (this->mData[i] == Character)
+			return i;
+	}
+
+	return this->mLength;
+}
+
 int CStringView::ParseInteger() const
 {
 	int Result = 0;
