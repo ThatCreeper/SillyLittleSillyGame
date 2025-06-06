@@ -3,6 +3,7 @@
 #include "CStringSplitter.h"
 #include "CGLLib.h"
 #include "CFile.h"
+#include "CConsole.h"
 
 namespace {
 	class CLevelReader {
@@ -31,6 +32,8 @@ namespace {
 
 CLevel::CLevel(CStringView Name)
 {
+	gConsole.Write("CLevel: Loading map ", Name, "\n");
+
 	CString FilePath("Levels/");
 	FilePath += Name;
 	CFile File(FilePath.View(), EFileType::Read);

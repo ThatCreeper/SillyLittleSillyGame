@@ -10,6 +10,12 @@ public:
 
 	void Write(const char *String, int Length);
 	void Write(CStringView String);
+	
+	template <typename... TRest>
+	inline void Write(CStringView First, TRest... Rest) {
+		this->Write(First);
+		this->Write(Rest...);
+	}
 
 	void WriteInteger(int Integer);
 
