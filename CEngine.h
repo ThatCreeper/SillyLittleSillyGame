@@ -2,11 +2,12 @@
 
 #include "CUserLib.h"
 #include "CGLLib.h"
+#include "CLevel.h"
 
 class CEngine
 {
 public:
-	CEngine();
+	CEngine(CStringView LevelName);
 	~CEngine();
 
 	void Loop();
@@ -20,6 +21,6 @@ protected:
 	HDeviceContext mDeviceContext;
 	HGLContext mGLContext;
 	unsigned long long mLastTime;
-	float mRed = 0;
+	CLevel *mLevel;
 };
 

@@ -26,3 +26,13 @@ CStringView CStringSplitter::ReadNonEmptyString()
 	Panic();
 	return CStringView(nullptr, 0);
 }
+
+CStringView CStringSplitter::NextLineNoComment(char CommentCharacter)
+{
+	CStringView Line = this->ReadString();
+
+	while (!Line.Invalid() && Line.Data()[0] == CommentCharacter)
+		Line = this->ReadString();
+
+	return Line;
+}

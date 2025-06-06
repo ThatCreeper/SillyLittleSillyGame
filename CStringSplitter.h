@@ -11,6 +11,8 @@ public:
 	CStringView PeakString();
 	CStringView ReadNonEmptyString();
 
+	CStringView NextLineNoComment(char CommentCharacter);
+
 protected:
 	CStringView mStringView;
 	char mSplitCharacter;

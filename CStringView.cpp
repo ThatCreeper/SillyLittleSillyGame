@@ -55,16 +55,23 @@ int CStringView::ParseInteger() const
 	}
 	
 	while (Index < this->mLength) {
-		char Character = this->mData[Index];
+		char Character = this->mData[Index++];
+
+		if (Character == '.')
+			continue;
+
 		if (Character < '0' || Character > '9')
 			return Negative ? -Result : Result;
 
 		Result *= 10;
 		Result += Character - '0';
-
-		Index++;
 	}
 	return Negative ? -Result : Result;
+}
+
+float CStringView::ParseFloat() const
+{
+	return (float)this->ParseInteger() / 1000.f;
 }
 
 CStringView CStringView::SubString(int Start, int Length) const

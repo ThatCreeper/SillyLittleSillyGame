@@ -14,7 +14,7 @@ long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WP
 	return gUserLib.DefaultWindowProcedure()(Window, MessageKind, WParam, LParam);
 }
 
-CEngine::CEngine()
+CEngine::CEngine(CStringView LevelName)
 {
 	gEngineSingleton = this;
 
@@ -35,11 +35,14 @@ CEngine::CEngine()
 	gUserLib.ShowWindow(this->mWindow);
 
 	this->mLastTime = GetTimeMilliseconds();
+
+	this->mLevel = new CLevel(LevelName);
 }
 
 CEngine::~CEngine()
 {
-	// Leak everything; program is closing
+	delete this->mLevel;
+	// Leak everything else; program is closing
 }
 
 void CEngine::Loop()
@@ -54,10 +57,9 @@ void CEngine::Loop()
 void CEngine::Frame()
 {
 	float DeltaTime = this->GetDeltaTime();
-	this->mRed += DeltaTime * 0.2f;
+	
+	this->mLevel->Draw();
 
-	gGLLib.SetClearColor(this->mRed, 0, 1, 1);
-	gGLLib.ClearBuffers(EClearBuffer::Color);
 	gGLLib.Flush();
 
 	SPaintStruct paint = gUserLib.BeginPainting(this->mWindow);

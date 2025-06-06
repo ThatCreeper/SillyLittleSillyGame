@@ -23,12 +23,8 @@ int main() {
 	CGlobalResource<CUserLib> UserRAII;
 	CGlobalResource<CGLLib> GLRAII;
 
-	//CEngine Engine;
-	//Engine.Loop();
-
-	CFile File("EntryPoint.cpp", EFileType::Read);
-
-	gConsole.Write(File.ReadAll());
+	CEngine Engine("Demo");
+	Engine.Loop();
 
 	gConsole.WaitForLine();
 

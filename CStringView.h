@@ -13,7 +13,10 @@ public:
 	// WARNING! Returns Length() if no such character exists
 	int IndexOfFirstOccurance(char Character) const;
 
+	// Ignores '.'
 	int ParseInteger() const;
+	// 1000 = 1.000
+	float ParseFloat() const;
 
 	CStringView SubString(int Start, int Length) const;
 	CStringView Trimmed() const;
