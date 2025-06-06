@@ -11,9 +11,9 @@ public:
 	CString();
 	~CString();
 
-	char *Data();
-	int Length();
-	CStringView View();
+	char *Data() const;
+	int Length() const;
+	CStringView View() const;
 
 	void operator+=(CStringView Other);
 

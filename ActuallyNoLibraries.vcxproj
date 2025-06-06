@@ -156,6 +156,7 @@
     <ClCompile Include="CAllocator.cpp" />
     <ClCompile Include="CConsole.cpp" />
     <ClCompile Include="CEngine.cpp" />
+    <ClCompile Include="CFile.cpp" />
     <ClCompile Include="CGLLib.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="CRT.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="CAllocator.h" />
     <ClInclude Include="CConsole.h" />
     <ClInclude Include="CEngine.h" />
+    <ClInclude Include="CFile.h" />
     <ClInclude Include="CGLLib.h" />
     <ClInclude Include="CGlobalResource.h" />
     <ClInclude Include="Core.h" />

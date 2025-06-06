@@ -40,17 +40,17 @@ CString::~CString()
 	delete[] this->mString;
 }
 
-char *CString::Data()
+char *CString::Data() const
 {
 	return this->mString;
 }
 
-int CString::Length()
+int CString::Length() const
 {
 	return this->mLength;
 }
 
-CStringView CString::View()
+CStringView CString::View() const
 {
 	return CStringView(this->mString, this->mLength);
 }

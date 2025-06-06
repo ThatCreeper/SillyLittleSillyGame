@@ -33,4 +33,8 @@ extern "C" {
 	void *CreateThread(void *SecurityAttributes, size_t StackSize, int (*Function)(void *), void *User, int Flags, int *OutThreadId);
 	void Sleep(int Milliseconds);
 	int Beep(int Frequency, int Milliseconds);
+
+	HFile CreateFileA(const char *FileName, int Permission, int SharedPermission, void *HandleSecurity, int Command, int FileAttributes, HFile TemplatePermissions);
+	int GetFileSizeEx(HFile File, unsigned long long *OutSize);
+	int ReadFile(HFile File, void *OutBuffer, int Count, int *OutRead, void *OverlappedStructure);
 }

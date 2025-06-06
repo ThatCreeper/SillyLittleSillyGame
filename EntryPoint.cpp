@@ -5,8 +5,9 @@
 #include "CGlobalResource.h"
 #include "CEngine.h"
 #include "CStringSplitter.h"
+#include "CFile.h"
 
-[[noreturn]] void Panic() {
+void Panic() {
 	gConsole.Write("Panic()! Did you set a breakpoint? Last Win Error: ");
 	gConsole.WriteInteger(GetWinAPIError());
 
@@ -25,22 +26,9 @@ int main() {
 	//CEngine Engine;
 	//Engine.Loop();
 
-	CStringSplitter Splitter("Hello\nWorld!\n\n1\n", '\n');
-	for (;;) {
-		CStringView Segment = Splitter.ReadString();
-		if (Segment.Invalid()) {
-			gConsole.Write("Invalid segment!\n");
-			break;
-		}
-		CStringView Trimmed = Segment.Trimmed();
-		if (Trimmed.Invalid()) {
-			gConsole.Write("SEG<EMPTY>\n");
-			continue;
-		}
-		gConsole.Write("SEG\"");
-		gConsole.Write(Trimmed);
-		gConsole.Write("\"\n");
-	}
+	CFile File("EntryPoint.cpp", EFileType::Read);
+
+	gConsole.Write(File.ReadAll());
 
 	gConsole.WaitForLine();
 

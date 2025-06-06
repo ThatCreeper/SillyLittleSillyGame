@@ -5,6 +5,7 @@ using HHeap = void *;
 using HConsoleHandle = void *;
 using HLibrary = void *;
 using HInstance = void *;
+using HFile = void *;
 
 enum class EHandleType : unsigned int {
 	Input = (unsigned int)(-10),
