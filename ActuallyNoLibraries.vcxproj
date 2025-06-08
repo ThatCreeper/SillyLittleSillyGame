@@ -81,6 +81,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -101,6 +102,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,6 +124,7 @@
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +145,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,12 +157,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AActor.cpp" />
+    <ClCompile Include="ABackground.cpp" />
     <ClCompile Include="CAllocator.cpp" />
     <ClCompile Include="CConsole.cpp" />
     <ClCompile Include="CEngine.cpp" />
     <ClCompile Include="CFile.cpp" />
     <ClCompile Include="CGLLib.cpp" />
     <ClCompile Include="CLevel.cpp" />
+    <ClCompile Include="CLevelReader.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="CRT.cpp" />
     <ClCompile Include="CString.cpp" />
@@ -168,6 +175,8 @@
     <ClCompile Include="EntryPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AActor.h" />
+    <ClInclude Include="ABackground.h" />
     <ClInclude Include="CAllocator.h" />
     <ClInclude Include="CConsole.h" />
     <ClInclude Include="CEngine.h" />
@@ -175,6 +184,7 @@
     <ClInclude Include="CGLLib.h" />
     <ClInclude Include="CGlobalResource.h" />
     <ClInclude Include="CLevel.h" />
+    <ClInclude Include="CLevelReader.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreWin.h" />
     <ClInclude Include="CString.h" />

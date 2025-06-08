@@ -31,6 +31,19 @@ CGLLib::CGLLib()
 	LOAD_GL(glClearColor);
 	LOAD_GL(glClear);
 	LOAD_GL(glFlush);
+	LOAD_GL(glEnable);
+	LOAD_GL(glStencilFunc);
+	LOAD_GL(glStencilMask);
+	LOAD_GL(glStencilOp);
+	LOAD_GL(glBlendFunc);
+	LOAD_GL(glVertex2f);
+	LOAD_GL(glColor4f);
+	LOAD_GL(glPushMatrix);
+	LOAD_GL(glPopMatrix);
+	LOAD_GL(glScalef);
+	LOAD_GL(glBegin);
+	LOAD_GL(glEnd);
+	LOAD_GL(glTranslatef);
 
 #undef LOAD_GL
 
@@ -98,6 +111,55 @@ void CGLLib::SwapBuffers(HDeviceContext DeviceContext)
 	this->mwglSwapLayerBuffers(DeviceContext, 1 /* Main Plane */);
 }
 
+void CGLLib::PushTransformMatrix()
+{
+	this->mglPushMatrix();
+}
+
+void CGLLib::PopTransformMatrix()
+{
+	this->mglPopMatrix();
+}
+
+void CGLLib::ScaleTransform(float X, float Y, float Z)
+{
+	this->mglScalef(X, Y, Z);
+}
+
+void CGLLib::TranslateTransform(float X, float Y, float Z)
+{
+	this->mglTranslatef(X, Y, Z);
+}
+
+void CGLLib::ColoredVertex(float X, float Y, float R, float G, float B, float A)
+{
+	this->mglColor4f(R, G, B, A);
+	this->mglVertex2f(X, Y);
+}
+
+void CGLLib::BeginTriangles()
+{
+	int Triangles = 0x0004;
+	this->mglBegin(Triangles);
+}
+
+void CGLLib::BeginQuads()
+{
+	int Quads = 0x0007;
+	this->mglBegin(Quads);
+}
+
+void CGLLib::BeginTriangleStrip()
+{
+	int TriangleStrip = 0x0005;
+	this->mglBegin(TriangleStrip);
+}
+
+void CGLLib::EndDrawing()
+{
+	this->mglEnd();
+}
+
 enum class EPixelFormatFlags : int {
 	DrawToWindow = 0x00000004,
 	SupportOpenGL = 0x00000020,
@@ -159,4 +221,13 @@ void CGLLib::RequestSanePixelFormat(HDeviceContext DeviceContext)
 void CGLLib::EnableVSync()
 {
 	this->mwglSwapIntervalEXT(1 /* VSYNC */);
+}
+
+void CGLLib::EnableTransparency()
+{
+	int SourceAlpha = 0x0302;
+	int OneMinusSourceAlpha = 0x0303;
+
+	this->mglEnable(EGLEnable::Blending);
+	this->mglBlendFunc(SourceAlpha, OneMinusSourceAlpha);
 }

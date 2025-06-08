@@ -4,31 +4,7 @@
 #include "CGLLib.h"
 #include "CFile.h"
 #include "CConsole.h"
-
-namespace {
-	class CLevelReader {
-	public:
-		CLevelReader(CStringView Data)
-			: mSplitter(Data, '\n')
-		{
-		}
-
-		CStringView Line() {
-			return this->mSplitter.NextLineNoComment('#');
-		}
-
-		int Int() {
-			return this->Line().ParseInteger();
-		}
-
-		float Float() {
-			return this->Line().ParseFloat();
-		}
-
-	protected:
-		CStringSplitter mSplitter;
-	};
-}
+#include "CLevelReader.h"
 
 CLevel::CLevel(CStringView Name)
 {
@@ -39,13 +15,39 @@ CLevel::CLevel(CStringView Name)
 	CFile File(FilePath.View(), EFileType::Read);
 	CLevelReader Reader(File.ReadAll());
 
-	this->mR = Reader.Float();
-	this->mG = Reader.Float();
-	this->mB = Reader.Float();
+	while (true) {
+		CStringView View = Reader.Line();
+		bool Added = false;
+		if (View.Invalid())
+			break;
+		for (int i = 0; i < this->ActorCount; i++) {
+			if (!this->mActors[i]) {
+				this->mActors[i] = MakeActor(View.Trimmed(), &Reader);
+				Added = true;
+				break;
+			}
+		}
+		if (!Added)
+			Panic();
+	}
+}
+
+CLevel::~CLevel()
+{
+	for (int i = 0; i < this->ActorCount; i++) {
+		delete this->mActors[i];
+	}
 }
 
 void CLevel::Draw()
 {
-	gGLLib.SetClearColor(this->mR, this->mG, this->mB, 1);
-	gGLLib.ClearBuffers(EClearBuffer::Color);
+	gGLLib.PushTransformMatrix();
+	gGLLib.TranslateTransform(-1, 1, 0);
+	gGLLib.ScaleTransform(2, -2, 2);
+
+	for (int i = 0; i < this->ActorCount; i++)
+		if (this->mActors[i])
+			this->mActors[i]->Draw();
+
+	gGLLib.PopTransformMatrix();
 }

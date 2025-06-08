@@ -11,6 +11,11 @@ enum class EClearBuffer : int {
 	Stencil = 0x00000400
 };
 
+enum class EGLEnable : int {
+	StencilTest = 0x0B90,
+	Blending = 0x0BE2
+};
+
 class CGLLib
 {
 public:
@@ -30,9 +35,19 @@ public:
 	void ClearBuffers(EClearBuffer Buffers);
 	void Flush();
 	void SwapBuffers(HDeviceContext DeviceContext);
+	void PushTransformMatrix();
+	void PopTransformMatrix();
+	void ScaleTransform(float X, float Y, float Z);
+	void TranslateTransform(float X, float Y, float Z);
+	void ColoredVertex(float X, float Y, float R, float G, float B, float A);
+	void BeginTriangles();
+	void BeginQuads();
+	void BeginTriangleStrip();
+	void EndDrawing();
 
 	void RequestSanePixelFormat(HDeviceContext DeviceContext);
 	void EnableVSync();
+	void EnableTransparency();
 
 protected:
 	HLibrary mGDILib;
@@ -50,6 +65,19 @@ protected:
 	void (*mglClearColor)(float, float, float, float);
 	void (*mglClear)(EClearBuffer);
 	void (*mglFlush)();
+	void (*mglEnable)(EGLEnable);
+	void (*mglStencilFunc)(int, int, unsigned int);
+	void (*mglStencilOp)(int, int, int);
+	void (*mglStencilMask)(unsigned int);
+	void (*mglVertex2f)(float, float);
+	void (*mglColor4f)(float, float, float, float);
+	void (*mglBlendFunc)(int, int);
+	void (*mglPushMatrix)();
+	void (*mglPopMatrix)();
+	void (*mglScalef)(float, float, float);
+	void (*mglBegin)(int);
+	void (*mglEnd)();
+	void (*mglTranslatef)(float, float, float);
 
 	void (*mwglSwapIntervalEXT)(int);
 };

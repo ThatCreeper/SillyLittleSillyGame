@@ -113,3 +113,15 @@ CStringView CStringView::Trimmed() const
 
 	return this->SubString(WhiteSpaceStart, WhiteSpaceEnd - WhiteSpaceStart);
 }
+
+bool CStringView::operator==(CStringView Other) const
+{
+	if (this->mLength != Other.mLength)
+		return false;
+	for (int i = 0; i < this->mLength; i++) {
+		if (this->mData[i] != Other.mData[i]) {
+			return false;
+		}
+	}
+	return true;
+}

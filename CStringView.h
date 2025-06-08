@@ -21,6 +21,8 @@ public:
 	CStringView SubString(int Start, int Length) const;
 	CStringView Trimmed() const;
 
+	bool operator==(CStringView Other) const;
+
 private:
 	const char *mData;
 	int mLength;

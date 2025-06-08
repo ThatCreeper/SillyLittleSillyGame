@@ -1,17 +1,19 @@
 #pragma once
 
 #include "CStringView.h"
+#include "AActor.h"
 
 class CLevel
 {
 public:
+	static constexpr int ActorCount = 256;
+
 	CLevel(CStringView Name);
+	~CLevel();
 
 	void Draw();
 
 protected:
-	float mR;
-	float mG;
-	float mB;
+	AActor *mActors[ActorCount] = { 0 };
 };
 

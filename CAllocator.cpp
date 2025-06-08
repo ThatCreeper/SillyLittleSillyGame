@@ -16,24 +16,34 @@ inline CAllocator::~CAllocator() {
 }
 
 inline void *CAllocator::Allocate(size_t Size) {
+	if (!Size)
+		return nullptr;
 	return HeapAlloc(this->mHeap, 0 /* No Flags */, Size);
 }
 
 inline void *CAllocator::AllocateZeroed(size_t Size) {
+	if (!Size)
+		return nullptr;
 	return HeapAlloc(this->mHeap, 0x8 /* Zeroed */, Size);
 }
 
 inline void CAllocator::Free(void *Pointer) {
+	if (!Pointer)
+		return;
 	HeapFree(this->mHeap, 0, Pointer);
 }
 
 void *CAllocator::Resize(void *Pointer, size_t NewSize)
 {
+	if (!Pointer)
+		return this->Allocate(NewSize);
 	return HeapReAlloc(this->mHeap, 0 /* No Flags */, Pointer, NewSize);
 }
 
 void *CAllocator::ResizeZeroed(void *Pointer, size_t NewSize)
 {
+	if (!Pointer)
+		return this->AllocateZeroed(NewSize);
 	return HeapReAlloc(this->mHeap, 0x8 /* Zeroed */, Pointer, NewSize);
 }
 
