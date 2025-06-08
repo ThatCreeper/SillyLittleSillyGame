@@ -45,6 +45,8 @@ CGLLib::CGLLib()
 	LOAD_GL(glEnd);
 	LOAD_GL(glTranslatef);
 	LOAD_GL(glViewport);
+	LOAD_GL(glScissor);
+	LOAD_GL(glDisable);
 
 #undef LOAD_GL
 
@@ -164,6 +166,17 @@ void CGLLib::EndDrawing()
 void CGLLib::SetViewport(int Width, int Height)
 {
 	this->mglViewport(0, 0, Width, Height);
+}
+
+void CGLLib::StartScissor(int X, int Y, int Width, int Height)
+{
+	this->mglScissor(X, Y, Width, Height);
+	this->mglEnable(EGLEnable::ScissorTest);
+}
+
+void CGLLib::EndScissor()
+{
+	this->mglDisable(EGLEnable::ScissorTest);
 }
 
 enum class EPixelFormatFlags : int {

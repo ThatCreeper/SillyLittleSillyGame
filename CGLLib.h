@@ -13,7 +13,8 @@ enum class EClearBuffer : int {
 
 enum class EGLEnable : int {
 	StencilTest = 0x0B90,
-	Blending = 0x0BE2
+	Blending = 0x0BE2,
+	ScissorTest = 0x0C11
 };
 
 class CGLLib
@@ -45,6 +46,8 @@ public:
 	void BeginTriangleStrip();
 	void EndDrawing();
 	void SetViewport(int Width, int Height);
+	void StartScissor(int X, int Y, int Width, int Height);
+	void EndScissor();
 
 	void RequestSanePixelFormat(HDeviceContext DeviceContext);
 	void EnableVSync();
@@ -80,6 +83,8 @@ protected:
 	void (*mglEnd)();
 	void (*mglTranslatef)(float, float, float);
 	void (*mglViewport)(int, int, int, int);
+	void (*mglScissor)(int, int, int, int);
+	void (*mglDisable)(EGLEnable);
 
 	void (*mwglSwapIntervalEXT)(int);
 };
