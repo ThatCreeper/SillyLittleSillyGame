@@ -41,7 +41,7 @@ CLevel::~CLevel()
 
 void CLevel::Draw()
 {
-	gGLLib.SetViewport(380, 240);
+	gGLLib.SetViewport(284, 160);
 
 	//gGLLib.SetClearColor(0, 0, 0, 1);
 	//gGLLib.ClearBuffers(EClearBuffer::Color);

@@ -1,5 +1,7 @@
 #include "CEngine.h"
 
+#include "CConsole.h"
+
 static CEngine *gEngineSingleton;
 
 long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WParam, long long LParam) {
@@ -10,6 +12,23 @@ long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WP
 	case EMessageKind::Destroyed:
 		gUserLib.StopMessageQueue();
 		return 0;
+	case EMessageKind::EraseBackground:
+		return 0;
+	case EMessageKind::KeyDown:
+		return 0;
+	case EMessageKind::KeyUp:
+		return 0;
+	case EMessageKind::Sizing:
+		{
+			SPaintRect *Rect = (SPaintRect *)LParam;
+			int Width = Rect->Right - Rect->Left;
+			int Multiple = Width / 284;
+			if (Multiple < 1)
+				Multiple = 1;
+			Rect->Right = Rect->Left + Multiple * 284;
+			Rect->Bottom = Rect->Top + Multiple * 160;
+			return 1;
+		}
 	}
 	return gUserLib.DefaultWindowProcedure()(Window, MessageKind, WParam, LParam);
 }
@@ -19,7 +38,7 @@ CEngine::CEngine(CStringView LevelName)
 	gEngineSingleton = this;
 
 	gUserLib.RegisterClass("WinClass", WindowProcedure);
-	this->mWindow = gUserLib.CreateWindow("WinClass", "Test Window", 500, 500);
+	this->mWindow = gUserLib.CreateWindow("WinClass", "Test Window", 284 * 2, 160 * 2);
 
 	// These are leaked because I frankly don't want to deal with them properly
 	this->mDeviceContext = gUserLib.GetWindowDeviceContext(this->mWindow);

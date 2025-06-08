@@ -37,6 +37,7 @@ CUserLib::CUserLib() {
 	LOAD_USER(BeginPaint);
 	LOAD_USER(EndPaint);
 	LOAD_USER(InvalidateRect);
+	LOAD_USER(SetWindowPos);
 
 #undef LOAD_USER
 }
@@ -115,6 +116,14 @@ void CUserLib::StopMessageQueue()
 	this->mPostQuitMessage(0 /* Exit Code */);
 }
 
+void CUserLib::SetWindowSize(HWindow Window, int Width, int Height)
+{
+	int Flags = 0x0010 /* No Activate */
+	          | 0x0002 /* No Move */
+	          | 0x0200 /* No Owner Z Order */;
+	this->mSetWindowPos(Window, nullptr, 0, 0, Width, Height, Flags);
+}
+
 FWindowProcedure CUserLib::DefaultWindowProcedure()
 {
 	return this->mDefWindowProcA;
@@ -142,4 +151,14 @@ void CUserLib::EndPainting(HWindow Window, SPaintStruct *PaintStruct)
 void CUserLib::RequestAnimationFrame(HWindow Window)
 {
 	this->mInvalidateRect(Window, nullptr, true /* Redraw Background */);
+}
+
+int LoWord(long long Value)
+{
+	return Value & 0xFFFF;
+}
+
+int HiWord(long long Value)
+{
+	return (Value >> 16) & 0xFFFF;
 }

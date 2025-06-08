@@ -25,15 +25,25 @@ struct SWindowMessage {
 
 enum class EMessageKind : unsigned int {
 	Destroyed = 0x0002,
-	Paint = 0x000F
+	Size = 0x0005,
+	Paint = 0x000F,
+	EraseBackground = 0x0014,
+	KeyDown = 0x0100,
+	KeyUp = 0x0101,
+	MouseMove = 0x0200,
+	LButtonDown = 0x0201,
+	LButtonUp = 0x0202,
+	RButtonDown = 0x0204,
+	RButonUp = 0x0205,
+	Sizing = 0x0214
 };
 typedef long long (*FWindowProcedure)(HWindow, EMessageKind, long long, long long);
 
 struct SPaintRect {
-	int left;
-	int top;
-	int right;
-	int bottom;
+	int Left;
+	int Top;
+	int Right;
+	int Bottom;
 };
 
 struct SPaintStruct {
@@ -44,6 +54,9 @@ struct SPaintStruct {
 	int PrivateIncUpdate;
 	char PrivateRGB[32];
 };
+
+int LoWord(long long Value);
+int HiWord(long long Value);
 
 class CUserLib {
 public:
@@ -65,6 +78,7 @@ public:
 	void TranslateVirtualKeyMessages(SWindowMessage *Message);
 	long long CallRelevantWindowProcedure(SWindowMessage *Message);
 	void StopMessageQueue();
+	void SetWindowSize(HWindow Window, int Width, int Height);
 
 	FWindowProcedure DefaultWindowProcedure();
 
@@ -90,6 +104,7 @@ private:
 	HDeviceContext(*mBeginPaint)(HWindow, SPaintStruct *);
 	int (*mEndPaint)(HWindow, SPaintStruct *);
 	int (*mInvalidateRect)(HWindow, SPaintRect *, int);
+	int (*mSetWindowPos)(HWindow, HWindow, int, int, int, int, unsigned int);
 };
 
 extern CUserLib gUserLib;
