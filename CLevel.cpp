@@ -6,8 +6,10 @@
 #include "CConsole.h"
 #include "CLevelReader.h"
 
-CLevel::CLevel(CStringView Name)
+CLevel::CLevel(CEngine *Engine, CStringView Name)
 {
+	this->mEngine = Engine;
+
 	gConsole.Write("CLevel: Loading map ", Name, "\n");
 
 	CString FilePath("Levels/");
@@ -22,7 +24,7 @@ CLevel::CLevel(CStringView Name)
 			break;
 		for (int i = 0; i < this->ActorCount; i++) {
 			if (!this->mActors[i]) {
-				this->mActors[i] = MakeActor(View.Trimmed(), &Reader);
+				this->mActors[i] = MakeActor(View.Trimmed(), this->mEngine, &Reader);
 				Added = true;
 				break;
 			}
@@ -49,4 +51,16 @@ void CLevel::Draw()
 	for (int i = 0; i < this->ActorCount; i++)
 		if (this->mActors[i])
 			this->mActors[i]->Draw();
+}
+
+void CLevel::Remove(AActor *Actor)
+{
+	if (!Actor)
+		return;
+	for (int i = 0; i < this->ActorCount; i++) {
+		if (this->mActors[i] == Actor) {
+			delete this->mActors[i];
+			this->mActors[i] = nullptr;
+		}
+	}
 }

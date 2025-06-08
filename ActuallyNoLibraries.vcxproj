@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClCompile Include="AActor.cpp" />
     <ClCompile Include="ABackground.cpp" />
+    <ClCompile Include="ACutscene.cpp" />
     <ClCompile Include="CAllocator.cpp" />
     <ClCompile Include="CConsole.cpp" />
     <ClCompile Include="CEngine.cpp" />
@@ -177,6 +178,7 @@
   <ItemGroup>
     <ClInclude Include="AActor.h" />
     <ClInclude Include="ABackground.h" />
+    <ClInclude Include="ACutscene.h" />
     <ClInclude Include="CAllocator.h" />
     <ClInclude Include="CConsole.h" />
     <ClInclude Include="CEngine.h" />

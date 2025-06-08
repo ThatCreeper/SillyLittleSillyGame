@@ -11,6 +11,8 @@ public:
 	CString();
 	~CString();
 
+	void operator=(CStringView String);
+
 	char *Data() const;
 	int Length() const;
 	CStringView View() const;

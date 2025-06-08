@@ -14,6 +14,8 @@ public:
 
 	void Frame();
 
+	CLevel *Level();
+
 protected:
 	float GetDeltaTime();
 

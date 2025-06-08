@@ -4,7 +4,8 @@
 
 DEF_ACTOR(ABackground)
 
-ABackground::ABackground(CLevelReader *Reader)
+ABackground::ABackground(CEngine *Engine, CLevelReader *Reader)
+	: AActor(Engine)
 {
 	this->R = Reader->Float();
 	this->G = Reader->Float();

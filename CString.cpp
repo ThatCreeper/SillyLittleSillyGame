@@ -40,6 +40,19 @@ CString::~CString()
 	delete[] this->mString;
 }
 
+void CString::operator=(CStringView String)
+{
+	delete[] this->mString;
+	// Zero-termed for compat
+	this->mString = new char[String.Length() + 1];
+	this->mLength = String.Length();
+
+	for (int i = 0; i < String.Length(); i++) {
+		this->mString[i] = String.Data()[i];
+	}
+	this->mString[String.Length()] = '\0';
+}
+
 char *CString::Data() const
 {
 	return this->mString;

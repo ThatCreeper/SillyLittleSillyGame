@@ -55,7 +55,7 @@ CEngine::CEngine(CStringView LevelName)
 
 	this->mLastTime = GetTimeMilliseconds();
 
-	this->mLevel = new CLevel(LevelName);
+	this->mLevel = new CLevel(this, LevelName);
 }
 
 CEngine::~CEngine()
@@ -85,6 +85,11 @@ void CEngine::Frame()
 	gUserLib.EndPainting(this->mWindow, &paint);
 
 	gUserLib.RequestAnimationFrame(this->mWindow);
+}
+
+CLevel *CEngine::Level()
+{
+	return this->mLevel;
 }
 
 float CEngine::GetDeltaTime()

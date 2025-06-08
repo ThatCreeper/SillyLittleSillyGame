@@ -8,12 +8,15 @@ class CLevel
 public:
 	static constexpr int ActorCount = 256;
 
-	CLevel(CStringView Name);
+	CLevel(CEngine *Engine, CStringView Name);
 	~CLevel();
 
 	void Draw();
 
+	void Remove(AActor *Actor);
+
 protected:
 	AActor *mActors[ActorCount] = { 0 };
+	CEngine *mEngine;
 };
 

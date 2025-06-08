@@ -5,7 +5,7 @@
 class ABackground : public AActor
 {
 public:
-	ABackground(CLevelReader *Reader);
+	ABackground(CEngine *Engine, CLevelReader *Reader);
 	~ABackground() override;
 
 	void Draw() override;
