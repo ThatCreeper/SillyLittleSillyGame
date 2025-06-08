@@ -44,6 +44,7 @@ CGLLib::CGLLib()
 	LOAD_GL(glBegin);
 	LOAD_GL(glEnd);
 	LOAD_GL(glTranslatef);
+	LOAD_GL(glViewport);
 
 #undef LOAD_GL
 
@@ -158,6 +159,11 @@ void CGLLib::BeginTriangleStrip()
 void CGLLib::EndDrawing()
 {
 	this->mglEnd();
+}
+
+void CGLLib::SetViewport(int Width, int Height)
+{
+	this->mglViewport(0, 0, Width, Height);
 }
 
 enum class EPixelFormatFlags : int {

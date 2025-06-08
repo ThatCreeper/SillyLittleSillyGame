@@ -41,13 +41,9 @@ CLevel::~CLevel()
 
 void CLevel::Draw()
 {
-	gGLLib.PushTransformMatrix();
-	gGLLib.TranslateTransform(-1, 1, 0);
-	gGLLib.ScaleTransform(2, -2, 2);
+	gGLLib.SetViewport(500, 500);
 
 	for (int i = 0; i < this->ActorCount; i++)
 		if (this->mActors[i])
 			this->mActors[i]->Draw();
-
-	gGLLib.PopTransformMatrix();
 }

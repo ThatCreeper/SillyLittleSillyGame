@@ -44,6 +44,7 @@ public:
 	void BeginQuads();
 	void BeginTriangleStrip();
 	void EndDrawing();
+	void SetViewport(int Width, int Height);
 
 	void RequestSanePixelFormat(HDeviceContext DeviceContext);
 	void EnableVSync();
@@ -78,6 +79,7 @@ protected:
 	void (*mglBegin)(int);
 	void (*mglEnd)();
 	void (*mglTranslatef)(float, float, float);
+	void (*mglViewport)(int, int, int, int);
 
 	void (*mwglSwapIntervalEXT)(int);
 };
