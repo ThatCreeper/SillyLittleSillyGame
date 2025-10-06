@@ -2,19 +2,21 @@
 
 #include "CUserLib.h"
 #include "CGLLib.h"
-#include "CLevel.h"
+
+class CGame;
 
 class CEngine
 {
 public:
-	CEngine(CStringView LevelName);
+	CEngine();
 	~CEngine();
 
 	void Loop();
 
 	void Frame();
 
-	CLevel *Level();
+	int Width();
+	int Height();
 
 protected:
 	float GetDeltaTime();
@@ -23,6 +25,10 @@ protected:
 	HDeviceContext mDeviceContext;
 	HGLContext mGLContext;
 	unsigned long long mLastTime;
-	CLevel *mLevel;
+	CGame *mGame;
+	int mWindowWidth = 800;
+	int mWindowHeight = 600;
+
+	friend long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WParam, long long LParam);;
 };
 

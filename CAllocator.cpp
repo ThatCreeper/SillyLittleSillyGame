@@ -7,8 +7,7 @@ CAllocator gAllocator;
 inline CAllocator::CAllocator() {
 	//this->mHeap = HeapCreate(0 /* No Flags (Execute, etc) */, 1 /* One Page Minimum Size */, 0 /* No Maximum Size */);
 	this->mHeap = GetProcessHeap();
-	if (!this->mHeap)
-		Panic();
+	Assert(this->mHeap);
 }
 
 inline CAllocator::~CAllocator() {

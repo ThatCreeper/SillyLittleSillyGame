@@ -75,6 +75,8 @@ public:
 
 	bool PopQueuedWindowMessage(SWindowMessage *OutMessage, HWindow Window);
 	bool PopQueuedMessage(SWindowMessage *OutMessage);
+	bool PeekQueuedWindowMessage(SWindowMessage *OutMessage, HWindow Window);
+	bool PeekQueuedMessage(SWindowMessage *OutMessage);
 	void TranslateVirtualKeyMessages(SWindowMessage *Message);
 	long long CallRelevantWindowProcedure(SWindowMessage *Message);
 	void StopMessageQueue();
@@ -97,6 +99,7 @@ private:
 	HInstance(*mCreateWindowExA)(int, const char *, const char *, int, int, int, int, int, HWindow, void *, HInstance, void *);
 	int (*mShowWindow)(HInstance, int);
 	int (*mGetMessageA)(SWindowMessage *, HWindow, unsigned int, unsigned int);
+	int (*mPeekMessageA)(SWindowMessage *, HWindow, unsigned int, unsigned int, unsigned int);
 	int (*mTranslateMessage)(SWindowMessage *);
 	long long (*mDispatchMessageA)(SWindowMessage *);
 	void (*mPostQuitMessage)(int);

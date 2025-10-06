@@ -23,7 +23,7 @@ int main() {
 	CGlobalResource<CUserLib> UserRAII;
 	CGlobalResource<CGLLib> GLRAII;
 
-	CEngine Engine("Demo");
+	CEngine Engine;
 	Engine.Loop();
 
 	return 0;

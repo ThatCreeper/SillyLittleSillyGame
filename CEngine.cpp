@@ -1,13 +1,15 @@
 #include "CEngine.h"
 
 #include "CConsole.h"
+#include "CGame.h"
 
 static CEngine *gEngineSingleton;
 
 long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WParam, long long LParam) {
 	switch (MessageKind) {
 	case EMessageKind::Paint:
-		gEngineSingleton->Frame();
+		SPaintStruct paint = gUserLib.BeginPainting(Window);
+		gUserLib.EndPainting(Window, &paint);
 		return 0;
 	case EMessageKind::Destroyed:
 		gUserLib.StopMessageQueue();
@@ -18,27 +20,21 @@ long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WP
 		return 0;
 	case EMessageKind::KeyUp:
 		return 0;
-	case EMessageKind::Sizing:
-		{
-			SPaintRect *Rect = (SPaintRect *)LParam;
-			int Width = Rect->Right - Rect->Left;
-			int Multiple = Width / 284;
-			if (Multiple < 1)
-				Multiple = 1;
-			Rect->Right = Rect->Left + Multiple * 284;
-			Rect->Bottom = Rect->Top + Multiple * 160;
-			return 1;
-		}
+	case EMessageKind::Size:
+		gEngineSingleton->mWindowWidth = LoWord(LParam);
+		gEngineSingleton->mWindowHeight = HiWord(LParam);
+		return 0;
 	}
 	return gUserLib.DefaultWindowProcedure()(Window, MessageKind, WParam, LParam);
 }
 
-CEngine::CEngine(CStringView LevelName)
+CEngine::CEngine()
 {
+	Assert(gEngineSingleton == nullptr);
 	gEngineSingleton = this;
 
 	gUserLib.RegisterClass("WinClass", WindowProcedure);
-	this->mWindow = gUserLib.CreateWindow("WinClass", "Test Window", 284 * 2, 160 * 2);
+	this->mWindow = gUserLib.CreateWindow("WinClass", "Test Window", mWindowWidth, mWindowHeight);
 
 	// These are leaked because I frankly don't want to deal with them properly
 	this->mDeviceContext = gUserLib.GetWindowDeviceContext(this->mWindow);
@@ -55,21 +51,29 @@ CEngine::CEngine(CStringView LevelName)
 
 	this->mLastTime = GetTimeMilliseconds();
 
-	this->mLevel = new CLevel(this, LevelName);
+	this->mGame = new CGame(this);
 }
 
 CEngine::~CEngine()
 {
-	delete this->mLevel;
+	//delete this->mLevel;
 	// Leak everything else; program is closing
 }
 
 void CEngine::Loop()
 {
 	SWindowMessage WindowMessage;
-	while (gUserLib.PopQueuedMessage(&WindowMessage)) {
-		gUserLib.TranslateVirtualKeyMessages(&WindowMessage);
-		gUserLib.CallRelevantWindowProcedure(&WindowMessage);
+	while (true) {
+		while (gUserLib.PeekQueuedMessage(&WindowMessage)) {
+			if (gUserLib.PopQueuedMessage(&WindowMessage)) {
+				gUserLib.TranslateVirtualKeyMessages(&WindowMessage);
+				gUserLib.CallRelevantWindowProcedure(&WindowMessage);
+			}
+			else {
+				return;
+			}
+		}
+		Frame();
 	}
 }
 
@@ -77,19 +81,27 @@ void CEngine::Frame()
 {
 	float DeltaTime = this->GetDeltaTime();
 	
-	this->mLevel->Draw();
+	// TODO: Don't do this every frame lol
+	gGLLib.SetViewport(mWindowWidth, mWindowHeight);
+	gGLLib.SetMatrixMode(EMatrixMode::Projection);
+	gGLLib.LoadIdentityMatrix();
+	gGLLib.OrthoMatrix(0, mWindowWidth, mWindowHeight, 0, 0, 1);
+	gGLLib.SetMatrixMode(EMatrixMode::ModelView);
+	gGLLib.LoadIdentityMatrix();
+	this->mGame->Frame(DeltaTime);
 
 	gGLLib.Flush();
-
-	SPaintStruct paint = gUserLib.BeginPainting(this->mWindow);
-	gUserLib.EndPainting(this->mWindow, &paint);
-
-	gUserLib.RequestAnimationFrame(this->mWindow);
+	gGLLib.SwapBuffers(this->mDeviceContext);
 }
 
-CLevel *CEngine::Level()
+int CEngine::Width()
 {
-	return this->mLevel;
+	return mWindowWidth;
+}
+
+int CEngine::Height()
+{
+	return mWindowHeight;
 }
 
 float CEngine::GetDeltaTime()

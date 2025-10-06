@@ -10,7 +10,7 @@ CGLLib::CGLLib()
 	this->mGDILib = LoadLibraryA("gdi32.dll");
 
 	// See CUserLib.cpp for a descriptive comment
-#define LOAD_GDI(Name) *((void **)(&this->m##Name)) = (void *)GetProcAddress(this->mGDILib, #Name); if (!this->m##Name) Panic()
+#define LOAD_GDI(Name) *((void **)(&this->m##Name)) = (void *)GetProcAddress(this->mGDILib, #Name); Assert(this->m##Name)
 
 	LOAD_GDI(ChoosePixelFormat);
 	LOAD_GDI(SetPixelFormat);
@@ -20,7 +20,7 @@ CGLLib::CGLLib()
 	this->mGLLib = LoadLibraryA("opengl32.dll");
 
 	// See CUserLib.cpp for a descriptive comment
-#define LOAD_GL(Name) *((void **)(&this->m##Name)) = (void *)GetProcAddress(this->mGLLib, #Name); if (!this->m##Name) Panic()
+#define LOAD_GL(Name) *((void **)(&this->m##Name)) = (void *)GetProcAddress(this->mGLLib, #Name); Assert(this->m##Name)
 
 	LOAD_GL(wglCreateContext);
 	LOAD_GL(wglDeleteContext);
@@ -37,6 +37,7 @@ CGLLib::CGLLib()
 	LOAD_GL(glStencilOp);
 	LOAD_GL(glBlendFunc);
 	LOAD_GL(glVertex2f);
+	LOAD_GL(glVertex2i);
 	LOAD_GL(glColor4f);
 	LOAD_GL(glPushMatrix);
 	LOAD_GL(glPopMatrix);
@@ -47,6 +48,9 @@ CGLLib::CGLLib()
 	LOAD_GL(glViewport);
 	LOAD_GL(glScissor);
 	LOAD_GL(glDisable);
+	LOAD_GL(glMatrixMode);
+	LOAD_GL(glLoadIdentity);
+	LOAD_GL(glOrtho);
 
 #undef LOAD_GL
 
@@ -72,7 +76,7 @@ void CGLLib::Close()
 void CGLLib::LoadExtensions()
 {
 	// See CUserLib.cpp for a descriptive comment
-#define LOAD_EXT(Name) *((void **)(&this->m##Name)) = (void *)this->mwglGetProcAddress(#Name); if (!this->m##Name) Panic()
+#define LOAD_EXT(Name) *((void **)(&this->m##Name)) = (void *)this->mwglGetProcAddress(#Name); Assert(this->m##Name)
 
 	LOAD_EXT(wglSwapIntervalEXT);
 
@@ -140,6 +144,16 @@ void CGLLib::ColoredVertex(float X, float Y, float R, float G, float B, float A)
 	this->mglVertex2f(X, Y);
 }
 
+void CGLLib::VertexColor(float R, float G, float B, float A)
+{
+	this->mglColor4f(R, G, B, A);
+}
+
+void CGLLib::IntVertex(int X, int Y)
+{
+	this->mglVertex2i(X, Y);
+}
+
 void CGLLib::BeginTriangles()
 {
 	int Triangles = 0x0004;
@@ -177,6 +191,21 @@ void CGLLib::StartScissor(int X, int Y, int Width, int Height)
 void CGLLib::EndScissor()
 {
 	this->mglDisable(EGLEnable::ScissorTest);
+}
+
+void CGLLib::SetMatrixMode(EMatrixMode Mode)
+{
+	this->mglMatrixMode(Mode);
+}
+
+void CGLLib::LoadIdentityMatrix()
+{
+	this->mglLoadIdentity();
+}
+
+void CGLLib::OrthoMatrix(double Left, double Right, double Bottom, double Top, double Near, double Far)
+{
+	this->mglOrtho(Left, Right, Bottom, Top, Near, Far);
 }
 
 enum class EPixelFormatFlags : int {

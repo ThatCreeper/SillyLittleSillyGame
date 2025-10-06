@@ -39,18 +39,6 @@
     <ClCompile Include="CEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CLevel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CLevelReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AActor.cpp">
-      <Filter>Source Files\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="ABackground.cpp">
-      <Filter>Source Files\Actor</Filter>
-    </ClCompile>
     <ClCompile Include="CUserLib.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -81,18 +69,15 @@
     <ClCompile Include="CStringSplitter.cpp">
       <Filter>Source Files\String</Filter>
     </ClCompile>
-    <ClCompile Include="ACutscene.cpp">
-      <Filter>Source Files\Actor</Filter>
+    <ClCompile Include="CGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHLRenderer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CLevel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CLevelReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core.h">
@@ -128,14 +113,11 @@
     <ClInclude Include="CStringSplitter.h">
       <Filter>Header Files\String</Filter>
     </ClInclude>
-    <ClInclude Include="AActor.h">
-      <Filter>Header Files\Actor</Filter>
+    <ClInclude Include="CGame.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ABackground.h">
-      <Filter>Header Files\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="ACutscene.h">
-      <Filter>Header Files\Actor</Filter>
+    <ClInclude Include="CHLRenderer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -13,7 +13,10 @@ enum class EHandleType : unsigned int {
 	Error = (unsigned int)(-12)
 };
 
-void Panic();
+_declspec(noreturn) void Panic();
+inline _declspec(noreturn) void Assert(bool MustBeTrue) {
+	if (!MustBeTrue) Panic();
+}
 
 extern "C" int atexit(void (*ExitHandler)());
 void CallExitHandlers();

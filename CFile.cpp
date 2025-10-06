@@ -57,13 +57,13 @@ void CFile::Open(const char *Path, EFileType Type)
 		break;
 	}
 	this->mFile = CreateFileA(Path, Permission, 0, nullptr, Command, 0x80 /* Normal */, nullptr);
-	if (!this->mFile || this->mFile == (void *)-1)
-		Panic();
+	Assert(this->mFile);
+	Assert(this->mFile != (void *)-1);
 	this->mData = nullptr;
 	this->mSize = 0;
 	if (Type != EFileType::Write) {
 		unsigned long long FileSize = 0;
 		GetFileSizeEx(this->mFile, &FileSize);
-		this->mSize = FileSize;
+		this->mSize = (int) FileSize;
 	}
 }

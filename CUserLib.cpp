@@ -23,13 +23,14 @@ CUserLib::CUserLib() {
 	this->mInstance = GetModuleHandleA(nullptr);
 
 	// I'm sorry.
-#define LOAD_USER(Name) *((void **)(&this->m##Name)) = (void *)GetProcAddress(this->mUserLib, #Name); if (!this->m##Name) Panic()
+#define LOAD_USER(Name) *((void **)(&this->m##Name)) = (void *)GetProcAddress(this->mUserLib, #Name); Assert(this->m##Name)
 	
 	LOAD_USER(RegisterClassA);
 	LOAD_USER(DefWindowProcA);
 	LOAD_USER(CreateWindowExA);
 	LOAD_USER(ShowWindow);
 	LOAD_USER(GetMessageA);
+	LOAD_USER(PeekMessageA);
 	LOAD_USER(TranslateMessage);
 	LOAD_USER(DispatchMessageA);
 	LOAD_USER(PostQuitMessage);
@@ -101,6 +102,16 @@ bool CUserLib::PopQueuedMessage(SWindowMessage *OutMessage)
 	return this->PopQueuedWindowMessage(OutMessage, nullptr);
 }
 
+bool CUserLib::PeekQueuedWindowMessage(SWindowMessage *OutMessage, HWindow Window)
+{
+	return this->mPeekMessageA(OutMessage, Window, 0, 0, 0 /* PM_NOREMOVE */);
+}
+
+bool CUserLib::PeekQueuedMessage(SWindowMessage *OutMessage)
+{
+	return this->PeekQueuedWindowMessage(OutMessage, nullptr);
+}
+
 void CUserLib::TranslateVirtualKeyMessages(SWindowMessage *Message)
 {
 	this->mTranslateMessage(Message);
@@ -138,8 +149,7 @@ SPaintStruct CUserLib::BeginPainting(HWindow Window)
 {
 	SPaintStruct PaintStruct;
 	HDeviceContext Context = this->mBeginPaint(Window, &PaintStruct);
-	if (Context != PaintStruct.DeviceContext)
-		Panic();
+	Assert(Context == PaintStruct.DeviceContext);
 	return PaintStruct;
 }
 

@@ -70,6 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -157,16 +163,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AActor.cpp" />
-    <ClCompile Include="ABackground.cpp" />
-    <ClCompile Include="ACutscene.cpp" />
     <ClCompile Include="CAllocator.cpp" />
     <ClCompile Include="CConsole.cpp" />
     <ClCompile Include="CEngine.cpp" />
     <ClCompile Include="CFile.cpp" />
+    <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CGLLib.cpp" />
-    <ClCompile Include="CLevel.cpp" />
-    <ClCompile Include="CLevelReader.cpp" />
+    <ClCompile Include="CHLRenderer.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="CRT.cpp" />
     <ClCompile Include="CString.cpp" />
@@ -176,17 +179,14 @@
     <ClCompile Include="EntryPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AActor.h" />
-    <ClInclude Include="ABackground.h" />
-    <ClInclude Include="ACutscene.h" />
     <ClInclude Include="CAllocator.h" />
     <ClInclude Include="CConsole.h" />
     <ClInclude Include="CEngine.h" />
     <ClInclude Include="CFile.h" />
+    <ClInclude Include="CGame.h" />
     <ClInclude Include="CGLLib.h" />
     <ClInclude Include="CGlobalResource.h" />
-    <ClInclude Include="CLevel.h" />
-    <ClInclude Include="CLevelReader.h" />
+    <ClInclude Include="CHLRenderer.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreWin.h" />
     <ClInclude Include="CString.h" />

@@ -17,6 +17,13 @@ enum class EGLEnable : int {
 	ScissorTest = 0x0C11
 };
 
+enum class EMatrixMode : int {
+	ModelView = 0x1700,
+	Projection = 0x1701,
+	Texture = 0x1702,
+	Color = 0x1800
+};
+
 class CGLLib
 {
 public:
@@ -41,6 +48,8 @@ public:
 	void ScaleTransform(float X, float Y, float Z);
 	void TranslateTransform(float X, float Y, float Z);
 	void ColoredVertex(float X, float Y, float R, float G, float B, float A);
+	void VertexColor(float R, float G, float B, float A);
+	void IntVertex(int X, int Y);
 	void BeginTriangles();
 	void BeginQuads();
 	void BeginTriangleStrip();
@@ -48,6 +57,9 @@ public:
 	void SetViewport(int Width, int Height);
 	void StartScissor(int X, int Y, int Width, int Height);
 	void EndScissor();
+	void SetMatrixMode(EMatrixMode Mode);
+	void LoadIdentityMatrix();
+	void OrthoMatrix(double Left, double Right, double Bottom, double Top, double Near, double Far);
 
 	void RequestSanePixelFormat(HDeviceContext DeviceContext);
 	void EnableVSync();
@@ -74,6 +86,7 @@ protected:
 	void (*mglStencilOp)(int, int, int);
 	void (*mglStencilMask)(unsigned int);
 	void (*mglVertex2f)(float, float);
+	void (*mglVertex2i)(int, int);
 	void (*mglColor4f)(float, float, float, float);
 	void (*mglBlendFunc)(int, int);
 	void (*mglPushMatrix)();
@@ -85,6 +98,9 @@ protected:
 	void (*mglViewport)(int, int, int, int);
 	void (*mglScissor)(int, int, int, int);
 	void (*mglDisable)(EGLEnable);
+	void (*mglMatrixMode)(EMatrixMode);
+	void (*mglLoadIdentity)();
+	void (*mglOrtho)(double, double, double, double, double, double);
 
 	void (*mwglSwapIntervalEXT)(int);
 };
