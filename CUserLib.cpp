@@ -52,14 +52,6 @@ CUserLib::~CUserLib() {
 	FreeLibrary(this->mUserLib);
 }
 
-void CUserLib::Open() {
-	new(&gUserLib)CUserLib;
-}
-
-void CUserLib::Close() {
-	gUserLib.~CUserLib();
-}
-
 HInstance CUserLib::GetInstance() {
 	return this->mInstance;
 }

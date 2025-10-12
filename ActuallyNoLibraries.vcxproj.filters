@@ -78,6 +78,9 @@
     <ClCompile Include="Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CAMDCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEngine.h">
@@ -93,9 +96,6 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="CGLLib.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="CGlobalResource.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="CFile.h">
@@ -123,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CAMDCache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

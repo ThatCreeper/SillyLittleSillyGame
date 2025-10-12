@@ -30,9 +30,6 @@ public:
 	CGLLib();
 	~CGLLib();
 
-	static void Open();
-	static void Close();
-
 	void LoadExtensions();
 
 	HGLContext MakeGLContext(HDeviceContext DeviceContext);

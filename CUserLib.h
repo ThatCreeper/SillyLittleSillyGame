@@ -65,9 +65,6 @@ public:
 	CUserLib();
 	~CUserLib();
 
-	static void Open();
-	static void Close();
-
 	HInstance GetInstance();
 
 	void RegisterClass(const char *ClassName, FWindowProcedure WindowProcedure);

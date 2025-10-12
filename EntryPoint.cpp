@@ -2,10 +2,10 @@
 #include "CConsole.h"
 #include "CUserLib.h"
 #include "CGLLib.h"
-#include "CGlobalResource.h"
 #include "CEngine.h"
 #include "CStringSplitter.h"
 #include "CFile.h"
+#include "CAMDCache.h"
 
 void Panic() {
 	gConsole.Write("Panic()! Did you set a breakpoint? Last Win Error: ");
@@ -20,8 +20,7 @@ int Frame = 0;
 unsigned long long lastTime = -1;
 
 int main() {
-	CGlobalResource<CUserLib> UserRAII;
-	CGlobalResource<CGLLib> GLRAII;
+	CAMDCache AMDCache;
 
 	CEngine Engine;
 	Engine.Loop();

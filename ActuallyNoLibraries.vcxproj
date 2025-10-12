@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CAllocator.cpp" />
+    <ClCompile Include="CAMDCache.cpp" />
     <ClCompile Include="CConsole.cpp" />
     <ClCompile Include="CEngine.cpp" />
     <ClCompile Include="CFile.cpp" />
@@ -181,12 +182,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CAllocator.h" />
+    <ClInclude Include="CAMDCache.h" />
     <ClInclude Include="CConsole.h" />
     <ClInclude Include="CEngine.h" />
     <ClInclude Include="CFile.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CGLLib.h" />
-    <ClInclude Include="CGlobalResource.h" />
     <ClInclude Include="CHLRenderer.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreWin.h" />

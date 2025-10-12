@@ -63,16 +63,6 @@ CGLLib::~CGLLib()
 	FreeLibrary(this->mGDILib);
 }
 
-void CGLLib::Open()
-{
-	new(&gGLLib)CGLLib;
-}
-
-void CGLLib::Close()
-{
-	gGLLib.~CGLLib();
-}
-
 void CGLLib::LoadExtensions()
 {
 	// See CUserLib.cpp for a descriptive comment
