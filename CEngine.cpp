@@ -2,6 +2,7 @@
 
 #include "CConsole.h"
 #include "CGame.h"
+#include "Math.h"
 
 static CEngine *gEngineSingleton;
 
@@ -21,9 +22,14 @@ long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WP
 	case EMessageKind::KeyUp:
 		return 0;
 	case EMessageKind::Size:
-		gEngineSingleton->mWindowWidth = LoWord(LParam);
-		gEngineSingleton->mWindowHeight = HiWord(LParam);
+		gEngineSingleton->mWindowRealWidth = LoWord(LParam);
+		gEngineSingleton->mWindowRealHeight = HiWord(LParam);
+		gEngineSingleton->UpdateDPI();
+		gEngineSingleton->UpdateProjection();
 		return 0;
+	case EMessageKind::DPIChanged:
+		gEngineSingleton->UpdateDPI();
+		gEngineSingleton->UpdateProjection();
 	}
 	return gUserLib.DefaultWindowProcedure()(Window, MessageKind, WParam, LParam);
 }
@@ -33,8 +39,12 @@ CEngine::CEngine()
 	Assert(gEngineSingleton == nullptr);
 	gEngineSingleton = this;
 
+	gUserLib.MarkProcessDPIAware();
+
 	gUserLib.RegisterClass("WinClass", WindowProcedure);
 	this->mWindow = gUserLib.CreateWindow("WinClass", "Test Window", mWindowWidth, mWindowHeight);
+
+	this->UpdateDPI();
 
 	// These are leaked because I frankly don't want to deal with them properly
 	this->mDeviceContext = gUserLib.GetWindowDeviceContext(this->mWindow);
@@ -46,6 +56,7 @@ CEngine::CEngine()
 
 	gGLLib.LoadExtensions();
 	gGLLib.EnableVSync();
+	this->UpdateProjection();
 
 	gUserLib.ShowWindow(this->mWindow);
 
@@ -81,11 +92,6 @@ void CEngine::Frame()
 {
 	float DeltaTime = this->GetDeltaTime();
 	
-	// TODO: Don't do this every frame lol
-	gGLLib.SetViewport(mWindowWidth, mWindowHeight);
-	gGLLib.SetMatrixMode(EMatrixMode::Projection);
-	gGLLib.LoadIdentityMatrix();
-	gGLLib.OrthoMatrix(0, mWindowWidth, mWindowHeight, 0, 0, 1);
 	gGLLib.SetMatrixMode(EMatrixMode::ModelView);
 	gGLLib.LoadIdentityMatrix();
 	this->mGame->Frame(DeltaTime);
@@ -96,12 +102,27 @@ void CEngine::Frame()
 
 int CEngine::Width()
 {
-	return mWindowWidth;
+	return this->mWindowWidth;
 }
 
 int CEngine::Height()
 {
-	return mWindowHeight;
+	return this->mWindowHeight;
+}
+
+int CEngine::ScalingFactor()
+{
+	return this->mScalingFactor;
+}
+
+int CEngine::RealWidth()
+{
+	return this->mWindowRealWidth;
+}
+
+int CEngine::RealHeight()
+{
+	return this->mWindowRealHeight;
 }
 
 float CEngine::GetDeltaTime()
@@ -110,4 +131,33 @@ float CEngine::GetDeltaTime()
 	float DeltaTime = (float)(CurrentTime - this->mLastTime) / 1000.f;
 	this->mLastTime = CurrentTime;
 	return DeltaTime;
+}
+
+// WindowRealWidth and -Height must be set before calling.
+void CEngine::UpdateDPI()
+{
+	this->mScalingFactor = Math::Floor(gUserLib.GetWindowScalingFactor(this->mWindow));
+	// I don't actually think the scaling factor can be less than one.
+	if (this->mScalingFactor < 1) this->mScalingFactor = 1;
+
+	int widthWrongness = this->mWindowRealWidth % this->mScalingFactor;
+	int heightWrongness = this->mWindowRealHeight % this->mScalingFactor;
+	if (widthWrongness != 0 || heightWrongness != 0) {
+		
+		this->mWindowRealWidth += this->mScalingFactor - widthWrongness;
+		this->mWindowRealHeight += this->mScalingFactor - heightWrongness;
+		gUserLib.SetWindowSize(this->mWindow, this->mWindowRealWidth, this->mWindowRealHeight);
+		return; // SetWindowSize acts as a deferred recursive call.
+	}
+
+	this->mWindowWidth = this->mWindowRealWidth / this->mScalingFactor;
+	this->mWindowHeight = this->mWindowRealHeight / this->mScalingFactor;
+}
+
+void CEngine::UpdateProjection()
+{
+	gGLLib.SetViewport(mWindowRealWidth, mWindowRealHeight);
+	gGLLib.SetMatrixMode(EMatrixMode::Projection);
+	gGLLib.LoadIdentityMatrix();
+	gGLLib.OrthoMatrix(0, mWindowWidth, mWindowHeight, 0, 0, 1);
 }

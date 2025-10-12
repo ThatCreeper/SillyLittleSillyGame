@@ -177,6 +177,7 @@
     <ClCompile Include="CStringView.cpp" />
     <ClCompile Include="CUserLib.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="Math.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CAllocator.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="CStringSplitter.h" />
     <ClInclude Include="CStringView.h" />
     <ClInclude Include="CUserLib.h" />
+    <ClInclude Include="Math.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

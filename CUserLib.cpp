@@ -39,6 +39,11 @@ CUserLib::CUserLib() {
 	LOAD_USER(EndPaint);
 	LOAD_USER(InvalidateRect);
 	LOAD_USER(SetWindowPos);
+	LOAD_USER(LoadCursorA);
+	LOAD_USER(SetCursor);
+	LOAD_USER(SetProcessDpiAwarenessContext);
+	LOAD_USER(GetDpiForWindow);
+	LOAD_USER(AdjustWindowRectExForDpi);
 
 #undef LOAD_USER
 }
@@ -67,7 +72,7 @@ void CUserLib::RegisterClass(const char *ClassName, FWindowProcedure WindowProce
 	WindowClass.WindowInstanceExtraBytes = 0;
 	WindowClass.ProcedureInstance = this->mInstance;
 	WindowClass.Icon = nullptr;
-	WindowClass.Cursor = nullptr;
+	WindowClass.Cursor = this->LoadCursor(32512 /* IDC_ARROW */);
 	WindowClass.BackgroundBrush = nullptr;
 	WindowClass.MenuName = nullptr;
 	WindowClass.ClassName = ClassName;
@@ -132,7 +137,21 @@ void CUserLib::SetWindowSize(HWindow Window, int Width, int Height)
 	int Flags = 0x0010 /* No Activate */
 	          | 0x0002 /* No Move */
 	          | 0x0200 /* No Owner Z Order */;
-	this->mSetWindowPos(Window, nullptr, 0, 0, Width, Height, Flags);
+	int Style = 0x00000000L  /* Overlapped */
+		      | 0x00C00000L  /* Caption (Title Bar) */
+		      | 0x00080000L  /* SysMenu (Title Bar Displays Menu) */
+		      | 0x00040000L  /* Thick Frame (Resizable) */
+		      | 0x00020000L  /* Minimize Box */
+		      | 0x00010000L; /* Maximize Box */
+
+	SPaintRect rect;
+	rect.Top = rect.Left = 0;
+	rect.Right = Width;
+	rect.Bottom = Height;
+
+	this->mAdjustWindowRectExForDpi(&rect, Style, false, 0, this->mGetDpiForWindow(Window));
+
+	this->mSetWindowPos(Window, nullptr, 0, 0, rect.Right - rect.Left, rect.Bottom - rect.Top, Flags);
 }
 
 FWindowProcedure CUserLib::DefaultWindowProcedure()
@@ -161,6 +180,21 @@ void CUserLib::EndPainting(HWindow Window, SPaintStruct *PaintStruct)
 void CUserLib::RequestAnimationFrame(HWindow Window)
 {
 	this->mInvalidateRect(Window, nullptr, true /* Redraw Background */);
+}
+
+HCursor CUserLib::LoadCursor(int Cursor)
+{
+	return this->mLoadCursorA(nullptr, ((const char *)((unsigned long long)((unsigned short)(Cursor)))));
+}
+
+void CUserLib::MarkProcessDPIAware()
+{
+	this->mSetProcessDpiAwarenessContext(-4 /* Per-monitor DPI awareness version 2 */);
+}
+
+float CUserLib::GetWindowScalingFactor(HWindow Window)
+{
+	return this->mGetDpiForWindow(Window) / 96.0f;
 }
 
 int LoWord(long long Value)

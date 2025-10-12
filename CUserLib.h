@@ -5,6 +5,7 @@
 using HRegisteredClass = unsigned short;
 using HWindow = void *;
 using HDeviceContext = void *;
+using HCursor = void *;
 
 struct SWindowClass;
 
@@ -35,7 +36,8 @@ enum class EMessageKind : unsigned int {
 	LButtonUp = 0x0202,
 	RButtonDown = 0x0204,
 	RButonUp = 0x0205,
-	Sizing = 0x0214
+	Sizing = 0x0214,
+	DPIChanged = 0x02E0
 };
 typedef long long (*FWindowProcedure)(HWindow, EMessageKind, long long, long long);
 
@@ -90,6 +92,11 @@ public:
 	void EndPainting(HWindow Window, SPaintStruct *PaintStruct);
 	void RequestAnimationFrame(HWindow Window);
 
+	HCursor LoadCursor(int Cursor);
+
+	void MarkProcessDPIAware();
+	float GetWindowScalingFactor(HWindow Window);
+
 private:
 	HInstance mInstance;
 	HLibrary mUserLib;
@@ -108,6 +115,11 @@ private:
 	int (*mEndPaint)(HWindow, SPaintStruct *);
 	int (*mInvalidateRect)(HWindow, SPaintRect *, int);
 	int (*mSetWindowPos)(HWindow, HWindow, int, int, int, int, unsigned int);
+	int (*mAdjustWindowRectExForDpi)(SPaintRect *, unsigned int, int, unsigned int, unsigned int);
+	HCursor(*mLoadCursorA)(HInstance, const char *);
+	HCursor(*mSetCursor)(HCursor);
+	int (*mSetProcessDpiAwarenessContext)(int);
+	unsigned int (*mGetDpiForWindow)(HWindow);
 };
 
 extern CUserLib gUserLib;
