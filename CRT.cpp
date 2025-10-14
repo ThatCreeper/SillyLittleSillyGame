@@ -35,6 +35,27 @@ extern "C" __declspec(allocate(".CRT$XTA")) _PVFV __xt_a[] = { nullptr }; // C t
 extern "C" __declspec(allocate(".CRT$XTZ")) _PVFV __xt_z[] = { nullptr }; // C terminators (last)
 #pragma comment(linker, "/merge:.CRT=.rdata")
 
+static void SetupCppInitializers() {
+	int deniedConstructors = 0;
+	for (_PVFV *i = __xc_a + 1; i < __xc_z; i++) {
+		// TODO: This is a magic number I found
+		// by looking at things. This probably
+		// breaks under certain circumstances,
+		// and it's almost certainly MSVC
+		// exclusive. Eventually, I should try
+		// to figure out how to replace this
+		// with something better.
+#define IS_CONSTRUCTOR_OF(Instance) (long long)&Instance - (long long)i == 8024
+#define DENY_CONSTRUCTOR_OF(Instance) if (IS_CONSTRUCTOR_OF(Instance)) {deniedConstructors++;continue;}
+		
+		DENY_CONSTRUCTOR_OF(gAllocator);
+		DENY_CONSTRUCTOR_OF(gConsole);
+		
+		(*i)();
+	}
+	Assert(deniedConstructors == 2);
+}
+
 // The parameter to this function is unused in the example provided by the Visual C Runtime.
 extern "C" int mainCRTStartup(void *) {
 	SetLastError(0);
@@ -50,14 +71,7 @@ extern "C" int mainCRTStartup(void *) {
 		(*i)();
 	}
 	// Call C++ static initializers
-	for (_PVFV *i = __xc_a + 1; i < __xc_z; i++) {
-#define IS_CONSTRUCTOR_OF(Instance) (long long)&Instance - (long long)i == 8024
-		if (IS_CONSTRUCTOR_OF(gAllocator))
-			continue;
-		if (IS_CONSTRUCTOR_OF(gConsole))
-			continue;
-		(*i)();
-	}
+	SetupCppInitializers();
 
 	int Ret = main();
 

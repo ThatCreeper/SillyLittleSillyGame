@@ -22,6 +22,9 @@ long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WP
 	case EMessageKind::KeyUp:
 		return 0;
 	case EMessageKind::Size:
+		// This says it's only called after the size has finished changing.
+		// This is not true.
+		// Ugh.
 		gEngineSingleton->mWindowRealWidth = LoWord(LParam);
 		gEngineSingleton->mWindowRealHeight = HiWord(LParam);
 		gEngineSingleton->UpdateDPI();
@@ -30,6 +33,7 @@ long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WP
 	case EMessageKind::DPIChanged:
 		gEngineSingleton->UpdateDPI();
 		gEngineSingleton->UpdateProjection();
+		return 0;
 	}
 	return gUserLib.DefaultWindowProcedure()(Window, MessageKind, WParam, LParam);
 }
@@ -138,7 +142,7 @@ void CEngine::UpdateDPI()
 {
 	this->mScalingFactor = Math::Floor(gUserLib.GetWindowScalingFactor(this->mWindow));
 	// I don't actually think the scaling factor can be less than one.
-	if (this->mScalingFactor < 1) this->mScalingFactor = 1;
+	if (this->mScalingFactor < 2) this->mScalingFactor = 2;
 
 	int widthWrongness = this->mWindowRealWidth % this->mScalingFactor;
 	int heightWrongness = this->mWindowRealHeight % this->mScalingFactor;
