@@ -191,6 +191,7 @@
     <ClInclude Include="CHLRenderer.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreWin.h" />
+    <ClInclude Include="CShared.h" />
     <ClInclude Include="CString.h" />
     <ClInclude Include="CStringSplitter.h" />
     <ClInclude Include="CStringView.h" />
