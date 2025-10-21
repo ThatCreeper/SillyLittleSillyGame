@@ -56,6 +56,11 @@ static void SetupCppInitializers() {
 	Assert(deniedConstructors == 2);
 }
 
+template<class PointerType>
+static void AssertNoneBetween(PointerType a, PointerType b) {
+	Assert(a + 1 == b);
+}
+
 // The parameter to this function is unused in the example provided by the Visual C Runtime.
 extern "C" int mainCRTStartup(void *) {
 	SetLastError(0);
@@ -65,12 +70,9 @@ extern "C" int mainCRTStartup(void *) {
 
 	SetupPerformanceCounter();
 
-	// Call C static initializers
-	// (There aren't any, but I want to be safe...)
-	for (_PIFV *i = __xi_a + 1; i < __xi_z; i++) {
-		(*i)();
-	}
-	// Call C++ static initializers
+	AssertNoneBetween(__xi_a, __xi_z);
+	AssertNoneBetween(__xp_a, __xp_z);
+	AssertNoneBetween(__xt_a, __xt_z);
 	SetupCppInitializers();
 
 	int Ret = main();
