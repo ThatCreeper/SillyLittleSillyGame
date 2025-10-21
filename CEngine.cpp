@@ -27,11 +27,13 @@ long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WP
 		// Ugh.
 		gEngineSingleton->mWindowRealWidth = LoWord(LParam);
 		gEngineSingleton->mWindowRealHeight = HiWord(LParam);
-		gEngineSingleton->UpdateDPI();
+		// Uncomment for real window size correction
+		// Check blame for technical reason
+		//gEngineSingleton->UpdateDPI();
 		gEngineSingleton->UpdateProjection();
 		return 0;
 	case EMessageKind::DPIChanged:
-		gEngineSingleton->UpdateDPI();
+		//gEngineSingleton->UpdateDPI();
 		gEngineSingleton->UpdateProjection();
 		return 0;
 	}
