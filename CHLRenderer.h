@@ -1,5 +1,7 @@
 #pragma once
 
+// High-level renderer
+// (About Raylib high-level)
 class CHLRenderer
 {
 public:

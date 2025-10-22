@@ -33,11 +33,9 @@ inline CShared<Type>::CShared(const CShared<Type> &Other)
 template<class Type>
 inline CShared<Type>::~CShared()
 {
-	gConsole.Write("Destructor!\n");
 	if (--*mReferences == 0) {
 		delete mPointer;
 		delete mReferences;
-		gConsole.Write("Dropped!\n");
 	}
 }
 
