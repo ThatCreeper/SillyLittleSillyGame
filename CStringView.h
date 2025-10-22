@@ -23,6 +23,9 @@ public:
 
 	bool operator==(CStringView Other) const;
 
+	const char *begin();
+	const char *end();
+
 private:
 	const char *mData;
 	int mLength;

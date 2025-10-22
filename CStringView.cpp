@@ -125,3 +125,13 @@ bool CStringView::operator==(CStringView Other) const
 	}
 	return true;
 }
+
+const char *CStringView::begin()
+{
+	return this->mData;
+}
+
+const char *CStringView::end()
+{
+	return this->mData + this->mLength;
+}
