@@ -14,7 +14,8 @@ enum class EClearBuffer : int {
 enum class EGLEnable : int {
 	StencilTest = 0x0B90,
 	Blending = 0x0BE2,
-	ScissorTest = 0x0C11
+	ScissorTest = 0x0C11,
+	Texture2D = 0x0DE1
 };
 
 enum class EMatrixMode : int {
@@ -22,6 +23,26 @@ enum class EMatrixMode : int {
 	Projection = 0x1701,
 	Texture = 0x1702,
 	Color = 0x1800
+};
+
+enum class ETextureTarget : int {
+	Texture2D = 0x0DE1
+};
+
+enum class EInternalFormat : int {
+	RGBA8 = 0x8058
+};
+
+enum class EFormat : int {
+	RGBA = 0x1908
+};
+
+enum class EPixelType : int {
+	UnsignedByte = 0x1401
+};
+
+struct SGLTextureHandle {
+	unsigned int Handle;
 };
 
 class CGLLib
@@ -46,6 +67,7 @@ public:
 	void TranslateTransform(float X, float Y, float Z);
 	void ColoredVertex(float X, float Y, float R, float G, float B, float A);
 	void VertexColor(float R, float G, float B, float A);
+	void TextureCoordinate(float X, float Y);
 	void IntVertex(int X, int Y);
 	void BeginTriangles();
 	void BeginQuads();
@@ -57,6 +79,12 @@ public:
 	void SetMatrixMode(EMatrixMode Mode);
 	void LoadIdentityMatrix();
 	void OrthoMatrix(double Left, double Right, double Bottom, double Top, double Near, double Far);
+	SGLTextureHandle CreateTexture();
+	void DestroyTexture(SGLTextureHandle Handle);
+	void BindTexture(ETextureTarget Target, SGLTextureHandle Handle);
+	void UploadTexture(ETextureTarget Target, int Width, int Height, EInternalFormat InternalFormat, EFormat Format, EPixelType PixelType, const void *Data);
+	void EnableTexture();
+	void DisableTexture();
 
 	void RequestSanePixelFormat(HDeviceContext DeviceContext);
 	void EnableVSync();
@@ -85,6 +113,7 @@ protected:
 	void (*mglVertex2f)(float, float);
 	void (*mglVertex2i)(int, int);
 	void (*mglColor4f)(float, float, float, float);
+	void (*mglTexCoord2f)(float, float);
 	void (*mglBlendFunc)(int, int);
 	void (*mglPushMatrix)();
 	void (*mglPopMatrix)();
@@ -98,6 +127,10 @@ protected:
 	void (*mglMatrixMode)(EMatrixMode);
 	void (*mglLoadIdentity)();
 	void (*mglOrtho)(double, double, double, double, double, double);
+	void (*mglGenTextures)(int, SGLTextureHandle *);
+	void (*mglTexImage2D)(ETextureTarget, int, EInternalFormat, int, int, int, EFormat, EPixelType, const void *);
+	void (*mglBindTexture)(ETextureTarget, SGLTextureHandle);
+	void (*mglDeleteTextures)(int, const SGLTextureHandle *);
 
 	void (*mwglSwapIntervalEXT)(int);
 };

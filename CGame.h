@@ -13,5 +13,7 @@ public:
 private:
 	CEngine *mEngine;
 	CHLRenderer mRenderer;
+
+	CShared<CTexture> mTex;
 };
 

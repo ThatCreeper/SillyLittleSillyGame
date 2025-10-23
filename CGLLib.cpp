@@ -39,6 +39,7 @@ CGLLib::CGLLib()
 	LOAD_GL(glVertex2f);
 	LOAD_GL(glVertex2i);
 	LOAD_GL(glColor4f);
+	LOAD_GL(glTexCoord2f);
 	LOAD_GL(glPushMatrix);
 	LOAD_GL(glPopMatrix);
 	LOAD_GL(glScalef);
@@ -51,6 +52,10 @@ CGLLib::CGLLib()
 	LOAD_GL(glMatrixMode);
 	LOAD_GL(glLoadIdentity);
 	LOAD_GL(glOrtho);
+	LOAD_GL(glGenTextures);
+	LOAD_GL(glTexImage2D);
+	LOAD_GL(glBindTexture);
+	LOAD_GL(glDeleteTextures);
 
 #undef LOAD_GL
 
@@ -139,6 +144,11 @@ void CGLLib::VertexColor(float R, float G, float B, float A)
 	this->mglColor4f(R, G, B, A);
 }
 
+void CGLLib::TextureCoordinate(float X, float Y)
+{
+	this->mglTexCoord2f(X, Y);
+}
+
 void CGLLib::IntVertex(int X, int Y)
 {
 	this->mglVertex2i(X, Y);
@@ -198,6 +208,38 @@ void CGLLib::OrthoMatrix(double Left, double Right, double Bottom, double Top, d
 	this->mglOrtho(Left, Right, Bottom, Top, Near, Far);
 }
 
+SGLTextureHandle CGLLib::CreateTexture()
+{
+	SGLTextureHandle Handle;
+	this->mglGenTextures(1, &Handle);
+	return Handle;
+}
+
+void CGLLib::DestroyTexture(SGLTextureHandle Handle)
+{
+	this->mglDeleteTextures(1, &Handle);
+}
+
+void CGLLib::BindTexture(ETextureTarget Target, SGLTextureHandle Handle)
+{
+	this->mglBindTexture(Target, Handle);
+}
+
+void CGLLib::UploadTexture(ETextureTarget Target, int Width, int Height, EInternalFormat InternalFormat, EFormat Format, EPixelType PixelType, const void *Data)
+{
+	this->mglTexImage2D(Target, 0, InternalFormat, Width, Height, 0, Format, PixelType, Data);
+}
+
+void CGLLib::EnableTexture()
+{
+	this->mglEnable(EGLEnable::Texture2D);
+}
+
+void CGLLib::DisableTexture()
+{
+	this->mglDisable(EGLEnable::Texture2D);
+}
+
 enum class EPixelFormatFlags : int {
 	DrawToWindow = 0x00000004,
 	SupportOpenGL = 0x00000020,
@@ -207,7 +249,7 @@ inline EPixelFormatFlags operator|(EPixelFormatFlags A, EPixelFormatFlags B) {
 	return (EPixelFormatFlags)((int)A | (int)B);
 }
 
-enum class EPixelType : char {
+enum class EPixelFormatType : char {
 	RGBA = 0,
 	ColorIndexed = 1
 };
@@ -216,7 +258,7 @@ struct SPixelFormat {
 	short Size;
 	short Version;
 	EPixelFormatFlags Flags;
-	EPixelType PixelType;
+	EPixelFormatType PixelType;
 	char ColorBits;
 	char RedBits;
 	char RedShift;
@@ -247,7 +289,7 @@ void CGLLib::RequestSanePixelFormat(HDeviceContext DeviceContext)
 	PixelFormat.Size = sizeof(SPixelFormat);
 	PixelFormat.Version = 1;
 	PixelFormat.Flags = EPixelFormatFlags::DrawToWindow | EPixelFormatFlags::SupportOpenGL;
-	PixelFormat.PixelType = EPixelType::RGBA;
+	PixelFormat.PixelType = EPixelFormatType::RGBA;
 	PixelFormat.ColorBits = 32;
 	PixelFormat.AlphaBits = 8;
 	PixelFormat.DepthBits = 24;
