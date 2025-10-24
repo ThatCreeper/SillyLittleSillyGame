@@ -56,6 +56,7 @@ CGLLib::CGLLib()
 	LOAD_GL(glTexImage2D);
 	LOAD_GL(glBindTexture);
 	LOAD_GL(glDeleteTextures);
+	LOAD_GL(glGetError);
 
 #undef LOAD_GL
 
@@ -74,6 +75,7 @@ void CGLLib::LoadExtensions()
 #define LOAD_EXT(Name) *((void **)(&this->m##Name)) = (void *)this->mwglGetProcAddress(#Name); Assert(this->m##Name)
 
 	LOAD_EXT(wglSwapIntervalEXT);
+	LOAD_EXT(glDebugMessageCallback);
 
 #undef LOAD_EXT
 }
@@ -310,4 +312,14 @@ void CGLLib::EnableTransparency()
 
 	this->mglEnable(EGLEnable::Blending);
 	this->mglBlendFunc(SourceAlpha, OneMinusSourceAlpha);
+}
+
+void CGLLib::SetDebugCallback(FDebugCallback Callback)
+{
+	this->mglDebugMessageCallback(Callback, nullptr);
+}
+
+int CGLLib::GetLastError()
+{
+	return this->mglGetError();
 }

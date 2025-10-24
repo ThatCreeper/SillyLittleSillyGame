@@ -40,6 +40,12 @@ long long WindowProcedure(HWindow Window, EMessageKind MessageKind, long long WP
 	return gUserLib.DefaultWindowProcedure()(Window, MessageKind, WParam, LParam);
 }
 
+void OpenGLCallback(int Source, int Type, unsigned int Id, int Severity, int Length, const char *Message, const void *User) {
+	gConsole.Write(Message);
+	gConsole.Write("\n");
+	return;
+}
+
 CEngine::CEngine()
 {
 	Assert(gEngineSingleton == nullptr);
@@ -61,6 +67,7 @@ CEngine::CEngine()
 	gGLLib.MakeContextCurrent(this->mDeviceContext, this->mGLContext);
 
 	gGLLib.LoadExtensions();
+	gGLLib.SetDebugCallback(OpenGLCallback);
 	gGLLib.EnableVSync();
 	this->UpdateProjection();
 
@@ -166,4 +173,6 @@ void CEngine::UpdateProjection()
 	gGLLib.SetMatrixMode(EMatrixMode::Projection);
 	gGLLib.LoadIdentityMatrix();
 	gGLLib.OrthoMatrix(0, mWindowWidth, mWindowHeight, 0, 0, 1);
+	gGLLib.SetMatrixMode(EMatrixMode::Texture);
+	gGLLib.LoadIdentityMatrix();
 }

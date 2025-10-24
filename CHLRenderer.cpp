@@ -26,19 +26,19 @@ void CHLRenderer::CopyTexture(CTexture &Texture, int X, int Y)
 	//  I want to get this working first, though.)
 	if (mCurrentTexture != &Texture) {
 		mCurrentTexture = &Texture;
-		Texture.Bind();
 		gGLLib.EnableTexture();
+		Texture.Bind();
 	}
+	gGLLib.VertexColor(0, 1, 1, 1);
 	this->SetRenderMode(ERenderMode::Quads);
-	gGLLib.VertexColor(1, 1, 1, 1);
 	gGLLib.TextureCoordinate(0, 0);
 	gGLLib.IntVertex(X, Y);
-	gGLLib.TextureCoordinate(1, 0);
-	gGLLib.IntVertex(X + Texture.Width(), Y);
-	gGLLib.TextureCoordinate(1, 1);
-	gGLLib.IntVertex(X + Texture.Width(), Y + Texture.Height());
+	gGLLib.TextureCoordinate(10, 0);
+	gGLLib.IntVertex(X + Texture.Width() * 10, Y);
+	gGLLib.TextureCoordinate(10, 1);
+	gGLLib.IntVertex(X + Texture.Width() * 10, Y + Texture.Height() * 10);
 	gGLLib.TextureCoordinate(0, 1);
-	gGLLib.IntVertex(X, Y + Texture.Height());
+	gGLLib.IntVertex(X, Y + Texture.Height() * 10);
 }
 
 void CHLRenderer::ConcludeDrawing()
@@ -79,7 +79,7 @@ void CHLRenderer::DisableTexture()
 
 CShared<CTexture> CTexture::FromBMP(CStringView BMP)
 {
-	CShared<CTexture> tex(new CTexture);
+	/*CShared<CTexture> tex(new CTexture);
 	const char *data = BMP.Data();
 	tex->mWidth = *reinterpret_cast<const int *>(data + 0x12);
 	tex->mHeight = *reinterpret_cast<const int *>(data + 0x16);
@@ -87,7 +87,21 @@ CShared<CTexture> CTexture::FromBMP(CStringView BMP)
 	gGLLib.EnableTexture();
 	tex->Bind();
 	gGLLib.UploadTexture(ETextureTarget::Texture2D, tex->mWidth, tex->mHeight, EInternalFormat::RGBA8, EFormat::RGBA, EPixelType::UnsignedByte, data + *reinterpret_cast<const int *>(data + 0x0A));
-	gGLLib.DisableTexture();
+	gGLLib.DisableTexture();*/
+	CShared<CTexture> tex(new CTexture);
+	Assert(!gGLLib.GetLastError());
+	char data[] = {
+		255, 0, 0, 255,
+		0, 255, 0, 255,
+		0, 0, 255, 255,
+		255, 255, 0, 255
+	};
+	tex->mWidth = 2;
+	tex->mHeight = 2;
+	tex->Bind();
+	Assert(!gGLLib.GetLastError());
+	gGLLib.UploadTexture(ETextureTarget::Texture2D, tex->mWidth, tex->mHeight, EInternalFormat::RGBA8, EFormat::RGBA, EPixelType::UnsignedByte, data);
+	Assert(!gGLLib.GetLastError());
 	return tex;
 }
 

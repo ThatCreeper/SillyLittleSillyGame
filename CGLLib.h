@@ -45,6 +45,8 @@ struct SGLTextureHandle {
 	unsigned int Handle;
 };
 
+typedef void (*FDebugCallback)(int, int, unsigned int, int, int, const char *, const void *);
+
 class CGLLib
 {
 public:
@@ -89,6 +91,8 @@ public:
 	void RequestSanePixelFormat(HDeviceContext DeviceContext);
 	void EnableVSync();
 	void EnableTransparency();
+	void SetDebugCallback(FDebugCallback Callback);
+	int GetLastError();
 
 protected:
 	HLibrary mGDILib;
@@ -131,8 +135,10 @@ protected:
 	void (*mglTexImage2D)(ETextureTarget, int, EInternalFormat, int, int, int, EFormat, EPixelType, const void *);
 	void (*mglBindTexture)(ETextureTarget, SGLTextureHandle);
 	void (*mglDeleteTextures)(int, const SGLTextureHandle *);
+	int (*mglGetError)();
 
 	void (*mwglSwapIntervalEXT)(int);
+	void (*mglDebugMessageCallback)(FDebugCallback, const void *);
 };
 
 extern CGLLib gGLLib;
