@@ -10,13 +10,13 @@ void CHLRenderer::ClearBackground(float R, float G, float B)
 
 void CHLRenderer::DrawRectangle(int X, int Y, int W, int H, float R, float G, float B)
 {
-	this->SetRenderMode(ERenderMode::Quads);
-	this->DisableTexture();
+	gGLLib.BeginQuads();
 	gGLLib.VertexColor(R, G, B, 1);
 	gGLLib.IntVertex(X, Y);
 	gGLLib.IntVertex(X + W, Y);
 	gGLLib.IntVertex(X + W, Y + H);
 	gGLLib.IntVertex(X, Y + H);
+	gGLLib.EndDrawing();
 }
 
 void CHLRenderer::CopyTexture(CTexture &Texture, int X, int Y)
@@ -24,13 +24,15 @@ void CHLRenderer::CopyTexture(CTexture &Texture, int X, int Y)
 	// I'm almost certain that this isn't how you're supposed to do this.
 	// (I think you're supposed to use glActiveTexture / glBind.
 	//  I want to get this working first, though.)
-	if (mCurrentTexture != &Texture) {
+	/*if (mCurrentTexture != &Texture) {
 		mCurrentTexture = &Texture;
 		gGLLib.EnableTexture();
 		Texture.Bind();
-	}
+	}*/
+	gGLLib.EnableTexture();
+	Texture.Bind();
+	gGLLib.BeginQuads();
 	gGLLib.VertexColor(0, 1, 1, 1);
-	this->SetRenderMode(ERenderMode::Quads);
 	gGLLib.TextureCoordinate(0, 0);
 	gGLLib.IntVertex(X, Y);
 	gGLLib.TextureCoordinate(10, 0);
@@ -39,42 +41,49 @@ void CHLRenderer::CopyTexture(CTexture &Texture, int X, int Y)
 	gGLLib.IntVertex(X + Texture.Width() * 10, Y + Texture.Height() * 10);
 	gGLLib.TextureCoordinate(0, 1);
 	gGLLib.IntVertex(X, Y + Texture.Height() * 10);
+	gGLLib.EndDrawing();
+	gGLLib.DisableTexture();
 }
 
 void CHLRenderer::ConcludeDrawing()
 {
-	Assert(this->mDrawing);
-	gGLLib.EndDrawing();
-	this->mDrawing = false;
-	DisableTexture();
+	Panic();
+	//Assert(this->mDrawing);
+	//gGLLib.EndDrawing();
+	//this->mDrawing = false;
+	//DisableTexture();
 }
 
 void CHLRenderer::EnableRenderMode(ERenderMode Mode)
 {
-	switch (Mode) {
-	case ERenderMode::Quads:
-		gGLLib.BeginQuads();
-		break;
-	default:
-		Panic();
-		break;
-	}
+	Panic();
+
+	//switch (Mode) {
+	//case ERenderMode::Quads:
+	//	gGLLib.BeginQuads();
+	//	break;
+	//default:
+	//	Panic();
+	//	break;
+	//}
 }
 
 void CHLRenderer::SetRenderMode(ERenderMode Mode)
 {
-	if (this->mDrawing && this->mCurrentRenderMode == Mode)
-		return;
-	this->EnableRenderMode(Mode);
-	this->mDrawing = true;
-	this->mCurrentRenderMode = Mode;
+	Panic();
+	//if (this->mDrawing && this->mCurrentRenderMode == Mode)
+	//	return;
+	//this->EnableRenderMode(Mode);
+	//this->mDrawing = true;
+	//this->mCurrentRenderMode = Mode;
 }
 
 void CHLRenderer::DisableTexture()
 {
-	if (!this->mCurrentTexture) return;
-	this->mCurrentTexture = nullptr;
-	gGLLib.DisableTexture();
+	Panic();
+	//if (!this->mCurrentTexture) return;
+	//this->mCurrentTexture = nullptr;
+	//gGLLib.DisableTexture();
 }
 
 CShared<CTexture> CTexture::FromBMP(CStringView BMP)

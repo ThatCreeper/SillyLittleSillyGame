@@ -56,6 +56,8 @@ CGLLib::CGLLib()
 	LOAD_GL(glTexImage2D);
 	LOAD_GL(glBindTexture);
 	LOAD_GL(glDeleteTextures);
+	LOAD_GL(glDrawPixels);
+	LOAD_GL(glRasterPos2i);
 	LOAD_GL(glGetError);
 
 #undef LOAD_GL
@@ -240,6 +242,12 @@ void CGLLib::EnableTexture()
 void CGLLib::DisableTexture()
 {
 	this->mglDisable(EGLEnable::Texture2D);
+}
+
+void CGLLib::CopyPixelBuffer(int X, int Y, int Width, int Height, const void *Data)
+{
+	this->mglRasterPos2i(X, Y);
+	this->mglDrawPixels(Width, Height, EFormat::RGBA, EPixelType::UnsignedByte, Data);
 }
 
 enum class EPixelFormatFlags : int {

@@ -87,6 +87,7 @@ public:
 	void UploadTexture(ETextureTarget Target, int Width, int Height, EInternalFormat InternalFormat, EFormat Format, EPixelType PixelType, const void *Data);
 	void EnableTexture();
 	void DisableTexture();
+	void CopyPixelBuffer(int X, int Y, int Width, int Height, const void *Data);
 
 	void RequestSanePixelFormat(HDeviceContext DeviceContext);
 	void EnableVSync();
@@ -135,6 +136,8 @@ protected:
 	void (*mglTexImage2D)(ETextureTarget, int, EInternalFormat, int, int, int, EFormat, EPixelType, const void *);
 	void (*mglBindTexture)(ETextureTarget, SGLTextureHandle);
 	void (*mglDeleteTextures)(int, const SGLTextureHandle *);
+	void (*mglDrawPixels)(int, int, EFormat, EPixelType, const void *);
+	void (*mglRasterPos2i)(int, int);
 	int (*mglGetError)();
 
 	void (*mwglSwapIntervalEXT)(int);

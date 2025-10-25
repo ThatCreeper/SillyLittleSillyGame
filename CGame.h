@@ -2,6 +2,7 @@
 
 #include "CEngine.h"
 #include "CHLRenderer.h"
+#include "CFile.h"
 
 class CGame
 {
@@ -15,5 +16,6 @@ private:
 	CHLRenderer mRenderer;
 
 	CShared<CTexture> mTex;
+	CFile mFile;
 };
 
